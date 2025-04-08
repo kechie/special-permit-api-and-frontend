@@ -6,7 +6,7 @@ const authRoutes = require('./routes/auth');
 const permitRoutes = require('./routes/permits');
 
 const app = express();
-const API_PORT = process.env.API_PORT || 3010;
+const API_PORT = process.env.API_PORT || 3021;
 
 // Middleware
 app.use(cors());
