@@ -6,7 +6,7 @@ const authRoutes = require('./routes/auth');
 const permitRoutes = require('./routes/permits');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const API_PORT = process.env.API_PORT || 3010;
 
 // Middleware
 app.use(cors());
@@ -19,8 +19,8 @@ app.use('/api/permits', permitRoutes);
 
 // Sync database and start server
 sequelize.sync().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  app.listen(API_PORT, () => {
+    console.log(`Server is running on port ${API_PORT}`);
   });
 }).catch(err => {
   console.error('Unable to connect to the database:', err);

@@ -5,7 +5,82 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true
     },
-    type: {
+    applicant_name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    permit_type: {
+      type: DataTypes.ENUM('peddler', 'special'),
+      allowNull: false
+    },
+    issue_date: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      validate: {
+        isDate: true
+      }
+    },
+    expiration_date: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      validate: {
+        isDate: true
+      }
+    },
+    status: {
+      type: DataTypes.ENUM('pending', 'approved', 'rejected'),
+      defaultValue: 'pending'
+    },
+    business_tax: {
+      type: DataTypes.DECIMAL(10, 2),
+      defaultValue: 0.00,
+      validate: { min: 0 }
+    },
+    mayors_permit_fee: {
+      type: DataTypes.DECIMAL(10, 2),
+      defaultValue: 0.00,
+      validate: { min: 0 }
+    },
+    individual_mayors_permit_fee: {
+      type: DataTypes.DECIMAL(10, 2),
+      defaultValue: 0.00,
+      validate: { min: 0 }
+    },
+    health_certificate: {
+      type: DataTypes.DECIMAL(10, 2),
+      defaultValue: 0.00,
+      validate: { min: 0 }
+    },
+    laboratory: {
+      type: DataTypes.DECIMAL(10, 2),
+      defaultValue: 0.00,
+      validate: { min: 0 }
+    },
+    sanitary_permit: {
+      type: DataTypes.DECIMAL(10, 2),
+      defaultValue: 0.00,
+      validate: { min: 0 }
+    },
+    garbage_fee: {
+      type: DataTypes.DECIMAL(10, 2),
+      defaultValue: 0.00,
+      validate: { min: 0 }
+    },
+    sticker_fee: {
+      type: DataTypes.DECIMAL(10, 2),
+      defaultValue: 0.00,
+      validate: { min: 0 }
+    }
+  }, {
+    timestamps: true,
+    paranoid: true,
+    underscored: true
+  });
+
+  return Permit;
+};
+
+/*     type: {
       type: DataTypes.STRING,
       allowNull: false
     },
@@ -15,8 +90,5 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: DataTypes.TEXT,
     validFrom: DataTypes.DATE,
-    validTo: DataTypes.DATE
-  });
-
-  return Permit;
-};
+    validTo: DataTypes.DATE 
+*/
