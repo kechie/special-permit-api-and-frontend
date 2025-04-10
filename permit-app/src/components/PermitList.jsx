@@ -9,7 +9,7 @@ const PermitList = () => {
   const API_BASE_URL = 'http://localhost:3021/api'
   useEffect(() => {
     const fetchPermits = async () => {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('spclpermittoken')
       const response = await axios.get(`${API_BASE_URL}/permits`, {
         headers: { Authorization: `Bearer ${token}` },
       })
@@ -20,8 +20,8 @@ const PermitList = () => {
   }, [])
 
   const handleDelete = async (id) => {
-    const token = localStorage.getItem('token')
-    await axios.delete(`${API_BASE_URL}/permits${id}`, {
+    const token = localStorage.getItem('spclpermittoken')
+    await axios.delete(`${API_BASE_URL}/permits/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
     setPermits(permits.filter((permit) => permit.id !== id))
@@ -53,7 +53,7 @@ const PermitList = () => {
               <td>{new Date(permit.expiration_date).toLocaleDateString()}</td>
               <td>{permit.status}</td>
               <td>
-                <Link to={`/permits/edit/${permit.id}`}>
+                <Link to={`/permits/${permit.id}/edit/`}>
                   <Button variant="warning" className="mr-2">Edit</Button>
                 </Link>
                 <Button variant="danger" onClick={() => handleDelete(permit.id)}>

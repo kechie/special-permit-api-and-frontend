@@ -25,15 +25,19 @@ const PermitForm = () => {
   const [isEdit, setIsEdit] = useState(false)
   const { id } = useParams()  // Retrieve the permit ID for editing
   const navigate = useNavigate() // Use navigate instead of history
+  const formatDate = (isoDate) => {
+    return new Date(isoDate).toISOString().split('T')[0]
+  }
 
+  const API_BASE_URL = 'http://localhost:3021/api'
   // Fetch the permit details if it's an edit action
   useEffect(() => {
     if (id) {
       setIsEdit(true)
       const fetchPermit = async () => {
         try {
-          const token = localStorage.getItem('token')
-          const response = await axios.get(`http://localhost:5000/api/permits/${id}`, {
+          const token = localStorage.getItem('spclpermittoken')
+          const response = await axios.get(`${API_BASE_URL}/permits/${id}`, {
             headers: { Authorization: `Bearer ${token}` }
           })
           setFormData(response.data)
@@ -56,12 +60,12 @@ const PermitForm = () => {
     e.preventDefault()
     setLoading(true)
 
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('spclpermittoken')
 
     try {
       if (isEdit) {
         // Update the permit if it's in edit mode
-        await axios.put(`http://localhost:5000/api/permits/${id}`, formData, {
+        await axios.put(`${API_BASE_URL}/permits/${id}`, formData, {
           headers: { Authorization: `Bearer ${token}` }
         })
       } else {
