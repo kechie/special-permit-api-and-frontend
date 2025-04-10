@@ -30,7 +30,7 @@ const PermitList = () => {
   return (
     <div>
       <h3>Permits</h3>
-      <Link to="/permits/create">
+      <Link to="/permits/new">
         <Button variant="primary" className="mb-3">Create Permit</Button>
       </Link>
       <Table striped bordered hover>

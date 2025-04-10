@@ -70,7 +70,7 @@ const PermitForm = () => {
         })
       } else {
         // Create a new permit
-        await axios.post('http://localhost:5000/api/permits', formData, {
+        await axios.post(`${API_BASE_URL}/permits/`, formData, {
           headers: { Authorization: `Bearer ${token}` }
         })
       }
