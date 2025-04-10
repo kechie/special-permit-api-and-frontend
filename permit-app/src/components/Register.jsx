@@ -18,7 +18,7 @@ const Register = () => {
       localStorage.setItem('token', response.data.token) // Save the token
       navigate('/permits')
     } catch (err) {
-      setError('Error registering user')
+      setError('Error registering user:', err)
     }
   }
 

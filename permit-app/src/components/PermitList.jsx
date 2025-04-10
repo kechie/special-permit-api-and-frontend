@@ -6,21 +6,22 @@ import { Link } from 'react-router-dom'
 
 const PermitList = () => {
   const [permits, setPermits] = useState([])
-  const API_BASE_URL = 'http://localhost:5000/api/v1'
+  const API_BASE_URL = 'http://localhost:3021/api'
   useEffect(() => {
     const fetchPermits = async () => {
       const token = localStorage.getItem('token')
-      const response = await axios.get('http://localhost:5000/api/permits', {
+      const response = await axios.get(`${API_BASE_URL}/permits`, {
         headers: { Authorization: `Bearer ${token}` },
       })
-      setPermits(response.data)
+      console.log('API Response:', response.data)
+      setPermits(response.data.permits)
     }
     fetchPermits()
   }, [])
 
   const handleDelete = async (id) => {
     const token = localStorage.getItem('token')
-    await axios.delete(`http://localhost:5000/api/permits/${id}`, {
+    await axios.delete(`${API_BASE_URL}/permits${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
     setPermits(permits.filter((permit) => permit.id !== id))
