@@ -1,18 +1,45 @@
-// validate.js
-
 const validateRegistration = (req, res, next) => {
-  const { email, password, name } = req.body;
-  if (!email || !password || !name) {
+  const { email, password, username, fullname, role } = req.body;
+
+  // Check if all required fields are present
+  if (!email || !password || !username || !fullname || !role) {
     return res.status(400).json({ message: 'All fields are required' });
   }
+
+  // Email validation (basic format check)
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ message: 'Invalid email format' });
+  }
+
+  // Password validation (ensure length is between 8 and 100 characters)
+  if (password.length < 8 || password.length > 100) {
+    return res.status(400).json({ message: 'Password must be between 8 and 100 characters' });
+  }
+
+  // Role validation (optional, depending on your requirements)
+  const validRoles = ['user', 'admin']; // Add other roles if necessary
+  if (!validRoles.includes(role)) {
+    return res.status(400).json({ message: 'Invalid role' });
+  }
+
   next();
 };
 
 const validateLogin = (req, res, next) => {
   const { email, password } = req.body;
+
+  // Check if both email and password are provided
   if (!email || !password) {
     return res.status(400).json({ message: 'Email and password are required' });
   }
+
+  // Email validation (basic format check)
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ message: 'Invalid email format' });
+  }
+
   next();
 };
 
@@ -20,20 +47,3 @@ module.exports = {
   validateRegistration,
   validateLogin
 };
-
-// module.exports = (req, res, next) => {
-//     const { body } = req;
-
-//     // Validate permit data
-//     if (!body.name || typeof body.name !== 'string') {
-//         return res.status(400).json({ error: 'Invalid permit name' });
-//     }
-//     if (!body.description || typeof body.description !== 'string') {
-//         return res.status(400).json({ error: 'Invalid permit description' });
-//     }
-//     if (!body.expiryDate || isNaN(Date.parse(body.expiryDate))) {
-//         return res.status(400).json({ error: 'Invalid expiry date' });
-//     }
-
-//     next();
-// };

@@ -1,3 +1,4 @@
+//models/index.js
 const { Sequelize } = require('sequelize');
 const config = require('../config/database.js')[process.env.NODE_ENV || 'development'];
 

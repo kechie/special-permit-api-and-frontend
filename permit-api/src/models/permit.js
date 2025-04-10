@@ -1,3 +1,4 @@
+//models/permit.js
 module.exports = (sequelize, DataTypes) => {
   const Permit = sequelize.define('Permit', {
     id: {

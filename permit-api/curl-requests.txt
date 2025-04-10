@@ -1,0 +1,36 @@
+curl -X GET \
+  "http://YOUR_SERVER/api/permits" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+
+curl -X GET \
+  "http://YOUR_SERVER/api/permits/PERMIT_ID" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+
+curl -X POST \
+  "http://YOUR_SERVER/api/permits" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "permitType": "Special Event",
+    "location": "123 Main St",
+    "startDate": "2025-04-10",
+    "endDate": "2025-04-11",
+    "status": "pending"
+  }'
+
+curl -X PUT \
+  "http://YOUR_SERVER/api/permits/PERMIT_ID" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "permitType": "Special Event",
+    "location": "456 Updated St",
+    "startDate": "2025-04-10",
+    "endDate": "2025-04-11",
+    "status": "approved"
+  }'
+
+curl -X DELETE \
+  "http://YOUR_SERVER/api/permits/PERMIT_ID" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+

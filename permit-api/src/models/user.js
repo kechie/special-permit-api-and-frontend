@@ -24,7 +24,19 @@ module.exports = (sequelize, DataTypes) => {
         len: [8, 100]
       }
     },
-    name: {
+    fullname: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    /*     name: {
+          type: DataTypes.STRING,
+          allowNull: true
+        }, */
+    role: {
       type: DataTypes.STRING,
       allowNull: false
     }
@@ -35,12 +47,12 @@ module.exports = (sequelize, DataTypes) => {
     hooks: {
       beforeCreate: async (user) => {
         if (user.password) {
-          user.password = await bcrypt.hash(user.password, 10);
+          user.password = await bcrypt.hash(user.password, 11);
         }
       },
       beforeUpdate: async (user) => {
         if (user.changed('password')) {
-          user.password = await bcrypt.hash(user.password, 10);
+          user.password = await bcrypt.hash(user.password, 11);
         }
       }
     }
