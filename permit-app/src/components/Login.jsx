@@ -9,15 +9,16 @@ const Login = () => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const navigate = useNavigate()
-
+  const API_BASE_URL = 'http://localhost:3021/api'
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', { email, password })
+      //const response = await axios.post('http://localhost:5000/api/auth/login', { email, password })
+      const response = await axios.post(`${API_BASE_URL}/auth/login`, { email, password })
       localStorage.setItem('token', response.data.token) // Save the token
       navigate('/permits')
     } catch (err) {
-      setError('Invalid credentials')
+      setError('Invalid credentials', err)
     }
   }
 

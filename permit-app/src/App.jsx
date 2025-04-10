@@ -5,6 +5,7 @@ import Register from './components/Register'
 import PermitList from './components/PermitList'
 import PermitForm from './components/PermitForm'
 import NavbarComponent from './components/NavbarComponent'
+//const API_BASE_URL = 'http://localhost:5000/api/v1'
 
 function App() {
   return (
