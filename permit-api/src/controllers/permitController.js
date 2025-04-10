@@ -18,8 +18,8 @@ exports.createPermit = async (req, res) => {
       garbage_fee,
       sticker_fee
     } = req.body;
-    const permitData = req.body;
-    const newPermit = await Permit.create(permitData);
+    //const permitData = req.body;
+    //const newPermit = await Permit.create(permitData);
     // Create a new permit
     /*     const newPermit = await Permit.create({
           applicant_name,
@@ -35,8 +35,9 @@ exports.createPermit = async (req, res) => {
           garbage_fee,
           sticker_fee
         });
-     */    //const permitData = req.body;
-    //const newPermit = await Permit.create(permitData);
+     */
+    const permitData = req.body;
+    const newPermit = await Permit.create(permitData);
     res.status(201).json(newPermit);
     //res.status(201).json(newPermit);
   } catch (error) {
@@ -48,9 +49,30 @@ exports.createPermit = async (req, res) => {
 
 // Get all permits
 exports.getAllPermits = async (req, res) => {
+  /*   try {
+      const permits = await Permit.findAll();
+      res.status(200).json(permits);
+    } catch (error) {
+      res.status(500).json({ message: 'Error retrieving permits', error });
+    } */
   try {
-    const permits = await Permit.findAll();
-    res.status(200).json(permits);
+    const page = parseInt(req.query.page) || 1;  // Default to page 1 if not provided
+    const limit = parseInt(req.query.limit) || 10;  // Default to 10 items per page if not provided
+    const offset = (page - 1) * limit;
+
+    const permits = await Permit.findAll({
+      limit: limit,
+      offset: offset,
+    });
+
+    // Get total count of permits for pagination
+    const totalPermits = await Permit.count();
+
+    res.status(200).json({
+      permits,
+      totalPages: Math.ceil(totalPermits / limit),
+      currentPage: page,
+    });
   } catch (error) {
     res.status(500).json({ message: 'Error retrieving permits', error });
   }
