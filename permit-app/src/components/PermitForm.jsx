@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import axios from 'axios'
-import { useHistory, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const PermitForm = () => {
   const [formData, setFormData] = useState({
@@ -24,7 +24,7 @@ const PermitForm = () => {
   const [loading, setLoading] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
   const { id } = useParams()  // Retrieve the permit ID for editing
-  const history = useHistory()
+  const navigate = useNavigate() // Use navigate instead of history
 
   // Fetch the permit details if it's an edit action
   useEffect(() => {
@@ -72,7 +72,7 @@ const PermitForm = () => {
       }
 
       setLoading(false)
-      history.push('/permits')  // Redirect to the permits list after submission
+      navigate('/permits')  // Redirect to the permits list after submission
     } catch (error) {
       setLoading(false)
       console.error('Error submitting permit', error)

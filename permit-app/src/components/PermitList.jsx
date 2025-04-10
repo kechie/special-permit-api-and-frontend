@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 
 const PermitList = () => {
   const [permits, setPermits] = useState([])
-
+  const API_BASE_URL = 'http://localhost:5000/api/v1'
   useEffect(() => {
     const fetchPermits = async () => {
       const token = localStorage.getItem('token')
