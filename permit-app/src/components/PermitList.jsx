@@ -76,10 +76,24 @@ const PermitList = () => {
               <td>
                 <Link to={`/permits/${permit.id}/edit/`}>
                   <Button variant="warning" className="mr-2">Edit</Button>
-                </Link>
+                </Link>{' '}
                 <Button variant="danger" onClick={() => handleDelete(permit.id)}>
                   Delete
-                </Button>
+                </Button>{' '}
+                <a
+                  href={`/permits/${permit.id}/print-top`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="secondary" className="mt-1">Print TOP</Button>
+                </a>{' '}
+                <a
+                  href={`/permits/${permit.id}/print`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="info" className="mt-1">Print Permit</Button>
+                </a>
               </td>
             </tr>
           ))}
