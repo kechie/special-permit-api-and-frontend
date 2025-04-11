@@ -59,7 +59,9 @@ const Login = () => {
 
             <Button type="submit">Login</Button>
           </Form>
-        </Card.Body></Card></Container>
+        </Card.Body>
+      </Card>
+    </Container>
   )
 }
 

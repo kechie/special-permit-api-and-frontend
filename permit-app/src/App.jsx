@@ -12,8 +12,8 @@ import PrivateRoute from './components/PrivateRoute'
 function App() {
   return (
     <Router>
-      <NavbarComponent />
       <div className="container mt-3">
+        <NavbarComponent />
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
