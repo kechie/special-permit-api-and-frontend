@@ -1,5 +1,5 @@
-const { Permit } = require('../models'); // Adjust the path based on your folder structure
-
+const { Op } = require('sequelize');
+const { Permit } = require('../models');
 
 // Create a new permit
 exports.createPermit = async (req, res) => {
