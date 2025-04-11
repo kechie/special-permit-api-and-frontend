@@ -1,7 +1,8 @@
 // src/App.jsx
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Login from './components/Login'
-import Register from './components/Register'
+//import Register from './components/Register'
+import Home from './components/Home'
 import PermitList from './components/PermitList'
 import PermitForm from './components/PermitForm'
 import NavbarComponent from './components/NavbarComponent'
@@ -15,6 +16,7 @@ function App() {
       <div className="container mt-3">
         <Routes>
           {/* Public Routes */}
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           {/* Protected Routes */}
           {/* <Route path="/register" element={<Register />} /> */}

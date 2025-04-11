@@ -1,5 +1,5 @@
-const { Permit } = require('../models'); // Adjust the path based on your folder structure
-
+const { Op } = require('sequelize');
+const { Permit } = require('../models');
 
 // Create a new permit
 exports.createPermit = async (req, res) => {
@@ -13,7 +13,7 @@ exports.createPermit = async (req, res) => {
   }
 };
 
-// Get all permits
+// Get all permits with optional search
 exports.getAllPermits = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
