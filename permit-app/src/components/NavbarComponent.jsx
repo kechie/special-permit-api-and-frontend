@@ -7,9 +7,9 @@ const NavbarComponent = () => {
     <Navbar bg="light" expand="lg">
       <Navbar.Brand href="/">Sp. Permits Management</Navbar.Brand>
       <Nav className="ml-auto">
-        <Link className="nav-link" to="/login">Login</Link>
         {/* <Link className="nav-link" to="/register">Register</Link> */}
         <Link className="nav-link" to="/permits">Permits</Link>
+        <Link className="nav-link" to="/login">Login</Link>
       </Nav>
     </Navbar>
   )

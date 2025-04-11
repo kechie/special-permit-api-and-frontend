@@ -23,14 +23,11 @@ const PermitForm = () => {
 
   const [loading, setLoading] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
-  const { id } = useParams()  // Retrieve the permit ID for editing
-  const navigate = useNavigate() // Use navigate instead of history
-  const formatDate = (isoDate) => {
-    return new Date(isoDate).toISOString().split('T')[0]
-  }
+  const { id } = useParams()
+  const navigate = useNavigate()
 
   const API_BASE_URL = 'http://localhost:3021/api'
-  // Fetch the permit details if it's an edit action
+
   useEffect(() => {
     if (id) {
       setIsEdit(true)
@@ -40,7 +37,12 @@ const PermitForm = () => {
           const response = await axios.get(`${API_BASE_URL}/permits/${id}`, {
             headers: { Authorization: `Bearer ${token}` }
           })
-          setFormData(response.data)
+          const formattedData = {
+            ...response.data,
+            issue_date: response.data.issue_date?.slice(0, 10),
+            expiration_date: response.data.expiration_date?.slice(0, 10),
+          }
+          setFormData(formattedData)
         } catch (error) {
           console.error('Error fetching permit', error)
         }
@@ -49,13 +51,11 @@ const PermitForm = () => {
     }
   }, [id])
 
-  // Handle form field changes
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData({ ...formData, [name]: value })
   }
 
-  // Submit the form (create or update)
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
@@ -64,19 +64,17 @@ const PermitForm = () => {
 
     try {
       if (isEdit) {
-        // Update the permit if it's in edit mode
         await axios.put(`${API_BASE_URL}/permits/${id}`, formData, {
           headers: { Authorization: `Bearer ${token}` }
         })
       } else {
-        // Create a new permit
         await axios.post(`${API_BASE_URL}/permits/`, formData, {
           headers: { Authorization: `Bearer ${token}` }
         })
       }
 
       setLoading(false)
-      navigate('/permits')  // Redirect to the permits list after submission
+      navigate('/permits')
     } catch (error) {
       setLoading(false)
       console.error('Error submitting permit', error)
