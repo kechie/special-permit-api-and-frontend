@@ -1,3 +1,4 @@
+//file config/database.js
 require('dotenv').config();
 
 module.exports = {
@@ -16,7 +17,7 @@ module.exports = {
   test: {
     username: process.env.DB_USER_TEST,
     password: process.env.DB_PASSWORD_TEST,
-    database: process.env.DB_TEST_NAME_TEST,
+    database: process.env.DB_NAME_TEST,
     host: process.env.DB_HOST_TEST,
     dialect: 'postgres',
     sync: {
