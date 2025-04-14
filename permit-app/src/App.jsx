@@ -37,23 +37,25 @@ class ErrorBoundary extends React.Component {
 
 function App() {
   return (
-    <Router>
-      <div className="container mt-3">
-        <NavbarComponent />
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
+    <ErrorBoundary>
+      <Router>
+        <div className="container mt-3">
+          <NavbarComponent />
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
 
-          {/* Protected Routes */}
-          <Route path="/permits" element={<PrivateRoute element={<PermitList />} />} />
-          <Route path="/permits/new" element={<PrivateRoute element={<PermitForm />} />} />
-          <Route path="/permits/:id/edit" element={<PrivateRoute element={<PermitForm />} />} />
-          <Route path="/permits/:id/print-top" element={<PrivateRoute element={<PrintTop />} />} />
-          <Route path="/permits/:id/print" element={<PrivateRoute element={<PrintPermit />} />} />
-        </Routes>
-      </div>
-    </Router>
+            {/* Protected Routes */}
+            <Route path="/permits" element={<PrivateRoute element={<PermitList />} />} />
+            <Route path="/permits/new" element={<PrivateRoute element={<PermitForm />} />} />
+            <Route path="/permits/:id/edit" element={<PrivateRoute element={<PermitForm />} />} />
+            <Route path="/permits/:id/print-top" element={<PrivateRoute element={<PrintTop />} />} />
+            <Route path="/permits/:id/print" element={<PrivateRoute element={<PrintPermit />} />} />
+          </Routes>
+        </div>
+      </Router>
+    </ErrorBoundary>
   )
 }
 

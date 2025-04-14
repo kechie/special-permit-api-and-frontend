@@ -27,7 +27,7 @@ const Login = () => {
 
   return (
     <div>
-      <Card className="mb-2">
+      <Card className="mb-3">
         <Card.Header>Special Permit Management Login</Card.Header>
         <Card.Body>
           {/*<Card.Title>Login</Card.Title>*/}
