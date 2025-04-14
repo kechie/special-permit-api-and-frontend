@@ -267,7 +267,7 @@ const PermitList = () => {
             <div className="print-only-content">
               <p><strong>Tax Order of Payment</strong></p>
               <p><strong>Applicant:</strong> {selectedPermit.applicant_name}</p>
-              <p><strong>Special Permit Type:</strong> {selectedPermit.permit_type.toUpperCase()}</p>
+              <p><strong>Applying for:</strong> {capitalizeFirstLetter(selectedPermit.permit_type)}</p>
               <p>
                 <strong>Business Tax:</strong> ₱
                 {parseFloat(selectedPermit.business_tax).toFixed(2)}
