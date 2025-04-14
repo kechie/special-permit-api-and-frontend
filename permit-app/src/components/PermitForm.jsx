@@ -422,7 +422,7 @@ const PermitForm = () => {
 
         <div className="d-flex gap-2">
           <Button variant="primary" type="submit" disabled={loading}>
-            {loading ? 'Submitting...' : isEdit ? 'Update Permit' : 'Create Permit'}
+            {loading ? 'Submitting...' : isEdit ? 'Update Permit' : 'Save Permit'}
           </Button>
           <Button variant="secondary" onClick={handleCancel} disabled={loading}>
             Cancel

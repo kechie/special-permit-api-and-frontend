@@ -3,6 +3,7 @@ import { Card, Table, Button, Form, InputGroup, Modal, Alert, Pagination } from 
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { capitalizeFirstLetter, formatDate } from '../utils/helpers';
 
 const PermitList = () => {
   const { role } = useAuth();
@@ -130,9 +131,9 @@ const PermitList = () => {
   };
 
   // Handle null dates
-  const formatDate = (date) => {
-    return date ? new Date(date).toLocaleDateString() : 'N/A';
-  };
+  //const formatDate = (date) => {
+  //  return date ? new Date(date).toLocaleDateString() : 'N/A';
+  //};
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
@@ -159,7 +160,7 @@ const PermitList = () => {
 
           <Link to="/permits/new">
             <Button variant="primary" className="mb-3">
-              Create Permit
+              New Special Permit
             </Button>
           </Link>
 
@@ -179,11 +180,11 @@ const PermitList = () => {
               {permits.map((permit) => (
                 <tr key={permit.id}>
                   <td>{permit.applicant_name}</td>
-                  <td>{permit.permit_type}</td>
+                  <td>{capitalizeFirstLetter(permit.permit_type)}</td>
                   <td>{formatDate(permit.application_date)}</td>
                   <td>{formatDate(permit.issue_date)}</td>
                   <td>{formatDate(permit.expiration_date)}</td>
-                  <td>{permit.status}</td>
+                  <td>{capitalizeFirstLetter(permit.status)}</td>
                   <td>
                     <Link to={`/permits/${permit.id}/edit`}>
                       <Button variant="warning" className="me-2">
@@ -264,8 +265,9 @@ const PermitList = () => {
           {modalError && <Alert variant="danger">{modalError}</Alert>}
           {selectedPermit && !modalLoading && !modalError && (
             <div className="print-only-content">
+              <p><strong>Tax Order of Payment</strong></p>
               <p><strong>Applicant:</strong> {selectedPermit.applicant_name}</p>
-              <p><strong>Permit Type:</strong> {selectedPermit.permit_type}</p>
+              <p><strong>Special Permit Type:</strong> {selectedPermit.permit_type.toUpperCase()}</p>
               <p>
                 <strong>Business Tax:</strong> ₱
                 {parseFloat(selectedPermit.business_tax).toFixed(2)}
