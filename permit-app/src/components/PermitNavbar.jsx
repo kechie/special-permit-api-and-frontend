@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom'
 import { Navbar, Nav } from 'react-bootstrap'
 
-const NavbarComponent = () => {
+const PermitNavbar = () => {
   return (
     <Navbar bg="light" expand="lg">
       <Navbar.Brand href="/">Sp. Permits Management</Navbar.Brand>
@@ -15,4 +15,4 @@ const NavbarComponent = () => {
   )
 }
 
-export default NavbarComponent
+export default PermitNavbar
