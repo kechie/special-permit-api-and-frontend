@@ -1,4 +1,3 @@
-//models/index.js
 const { Sequelize } = require('sequelize');
 const config = require('../config/database.js')[process.env.NODE_ENV || 'development'];
 
@@ -9,7 +8,10 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
 
 const db = {
   sequelize,
-  Sequelize
+  Sequelize,
+  sync: (options = { force: false }) => {
+    return sequelize.sync(options);
+  }
 };
 
 // Import models

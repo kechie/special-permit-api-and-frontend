@@ -23,7 +23,7 @@ const Login = () => {
       if (!response.data.token) {
         throw new Error('No token received from server');
       }
-      login(response.data.token);
+      login(response.data.token, response.data.user.role || 'user');
       navigate('/permits');
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Invalid credentials');
@@ -45,19 +45,10 @@ const Login = () => {
         <Card.Body>
           <Card.Title>You are logged in</Card.Title>
           <p>Would you like to manage your permits or log out?</p>
-          <Button
-            as={Link}
-            to="/permits"
-            variant="primary"
-            className="me-2"
-          >
+          <Button as={Link} to="/permits" variant="primary" className="me-2">
             View Permits
           </Button>
-          <Button
-            variant="outline-danger"
-            onClick={handleLogout}
-            disabled={loading}
-          >
+          <Button variant="outline-danger" onClick={handleLogout} disabled={loading}>
             Logout
           </Button>
         </Card.Body>

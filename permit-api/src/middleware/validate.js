@@ -18,7 +18,7 @@ const validateRegistration = (req, res, next) => {
   }
 
   // Role validation (optional, depending on your requirements)
-  const validRoles = ['user', 'admin']; // Add other roles if necessary
+  const validRoles = ['user', 'cashier', 'assessment', 'monitor', 'admin', 'superadmin']; // Add other roles if necessary
   if (!validRoles.includes(role)) {
     return res.status(400).json({ message: 'Invalid role' });
   }

@@ -80,10 +80,9 @@ const PermitForm = () => {
       setLoading(false);
       return;
     }
-
+    //"{"applicant_name":"Johnny Smith","permit_type":"peddler","application_date":"2025-01-01","issue_date":"","expiration_date":"","status":"pending","business_tax":0,"mayors_permit_fee":0,"individual_mayors_permit_fee":0,"health_certificate":0,"laboratory":0,"sanitary_permit":0,"garbage_fee":0,"sticker_fee":0}"
     // Validate required fields
-    if (!formData.applicant_name || !formData.permit_type || !formData.application_date ||
-      !formData.issue_date || !formData.expiration_date) {
+    if (!formData.applicant_name || !formData.permit_type || !formData.application_date) {
       setError('All required fields must be filled');
       setLoading(false);
       return;
@@ -174,26 +173,24 @@ const PermitForm = () => {
           </Col>
           <Col md={4}>
             <Form.Group controlId="issue_date" className="mb-3">
-              <Form.Label>Issue Date *</Form.Label>
+              <Form.Label>Issue Date</Form.Label>
               <Form.Control
                 type="date"
                 name="issue_date"
                 value={formData.issue_date}
                 onChange={handleChange}
-                required
                 disabled={loading}
               />
             </Form.Group>
           </Col>
           <Col md={4}>
             <Form.Group controlId="expiration_date" className="mb-3">
-              <Form.Label>Expiration Date *</Form.Label>
+              <Form.Label>Expiration Date</Form.Label>
               <Form.Control
                 type="date"
                 name="expiration_date"
                 value={formData.expiration_date}
                 onChange={handleChange}
-                required
                 disabled={loading}
               />
             </Form.Group>

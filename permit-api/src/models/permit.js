@@ -23,14 +23,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     issue_date: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true,
       validate: {
         isDate: true
       }
     },
     expiration_date: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true,
       validate: {
         isDate: true
       }
@@ -87,16 +87,3 @@ module.exports = (sequelize, DataTypes) => {
 
   return Permit;
 };
-
-/*     type: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    status: {
-      type: DataTypes.ENUM('pending', 'approved', 'rejected'),
-      defaultValue: 'pending'
-    },
-    description: DataTypes.TEXT,
-    validFrom: DataTypes.DATE,
-    validTo: DataTypes.DATE 
-*/

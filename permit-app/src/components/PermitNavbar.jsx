@@ -12,7 +12,7 @@ const PermitNavbar = () => {
   };
 
   return (
-    <Navbar expand="lg" className="mb-3">
+    <Navbar bg="dark" variant="dark" expand="lg" className="mb-3">
       <Navbar.Brand as={Link} to="/">Permit App</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">

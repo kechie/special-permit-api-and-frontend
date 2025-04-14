@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Table, Button, Form, InputGroup, Modal, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const PermitList = () => {
+  const { role } = useAuth();
   const [permits, setPermits] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [showTopModal, setShowTopModal] = useState(false);
@@ -20,7 +22,7 @@ const PermitList = () => {
         headers: { Authorization: `Bearer ${token}` },
         params: { search },
       });
-      console.log('API Response:', response.data);
+      //console.log('API Response:', response.data);
       setPermits(response.data.permits);
     } catch (err) {
       console.error('Error fetching permits:', err);
@@ -116,7 +118,7 @@ const PermitList = () => {
 
   return (
     <div className="container mt-3">
-      {/*       <style>
+      <style>
         {`
           .permit-document {
             font-family: Arial, sans-serif;
@@ -160,7 +162,7 @@ const PermitList = () => {
             .modal.print-only .print-only-content { display: block !important; }
           }
         `}
-      </style> */}
+      </style>
       <h3>Permits</h3>
       <InputGroup className="mb-3">
         <Form.Control
@@ -205,13 +207,15 @@ const PermitList = () => {
                     Edit
                   </Button>
                 </Link>
-                <Button
-                  variant="danger"
-                  onClick={() => handleDelete(permit.id)}
-                  className="me-2"
-                >
-                  Delete
-                </Button>
+                {(role === 'admin' || role === 'superadmin') && (
+                  <Button
+                    variant="danger"
+                    onClick={() => handleDelete(permit.id)}
+                    className="me-2"
+                  >
+                    Delete
+                  </Button>
+                )}
                 <Button
                   variant="secondary"
                   onClick={() => handleShowTopModal(permit.id)}
@@ -328,7 +332,7 @@ const PermitList = () => {
                   <p className="restrictions">
                     PROVIDED THAT THERE WILL BE NO SELLING AND DISPLAYING OF WARES AND GOODS ON THE PUBLIC ROADS, STREETS, SIDEWALKS/SIDEWAYS AND IN ANY PART OF THE MARKET. PROVIDED FURTHER, THAT CITY ORDINANCE NO. 97-043 (OPLAN DALUS CODE) SHALL BE STRICTLY COMPLIED WITH". FURTHERMORE, PROVIDED THAT THERE WILL BE NO SELLING AND DISPLAYING AT RIZAL STREET, BONIFACIO STREET AND INFRONT OF CENTENNIAL ARENA.
                     <br />
-                    (MASAPUL A SAAN NGA AGLAKO KEN AGI-DISPLAY ITI TAGILAKO NA ITI PAMPUBLIKO A KALSADA, DALAN, IGID TI KALSADA KEN ITI ANIAMAN A PASET TI TIENDAAN. MASAPUL PAY ITI NAIGET A PANANGSUROT ITI CITY ORDINANCE NO. 97-043 (OPLAN DALUS CODE). MALAKSID ITI DAYTA, MAIPARIT PAY NGA AGLAKO KEN MANGI-DISPLAY TI LAKO ITI RIZAL STREET, BONIFACIO STREET KEN SANGO TI CENTENNIAL Arena.)
+                    (MASAPUL A SAAN NGA AGLAKO KEN AGI-DISPLAY ITI TAGILAKO NA ITI PAMPUBLIKO A KALSADA, DALAN, IGID TI KALSADA KEN ITI ANIAMAN A PASET TI TIENDAAN. MASAPUL PAY ITI NAIGET A PANANGSUROT ITI CITY ORDINANCE NO. 97-043 (OPLAN DALUS CODE). MALAKSID ITI DAYTA, MAIPARIT PAY NGA AGLAKO KEN MANGI-DISPLAY TI LAKO ITI RIZAL STREET, BONIFACIO STREET KEN SANGO TI CENTENNIAL ARENA.)
                   </p>
                   <p>
                     This PERMIT shall neither be negotiable nor transferable and shall be valid only for the operation or conduct of the aforesaid business at the place given above for the period upon approval until {new Date(selectedPermit.expiration_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}.
