@@ -7,7 +7,7 @@ const CarouselImage = ({ text }) => {
   return (
     <div className="d-flex justify-content-center bg-dark">
       <Image
-        src={`https://via.placeholder.com/800x400?text=${encodeURIComponent(text)}`}
+        src={`https://placehold.co/600x400?text=${encodeURIComponent(text)}`}
         alt={text}
         fluid
       />

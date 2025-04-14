@@ -1,4 +1,5 @@
 // src/App.jsx
+import React from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Login from './components/Login'
 //import Register from './components/Register'
@@ -9,6 +10,30 @@ import PrintTop from './components/PrintTop'
 import PrintPermit from './components/PrintPermit'
 import NavbarComponent from './components/NavbarComponent'
 import PrivateRoute from './components/PrivateRoute'
+
+class ErrorBoundary extends React.Component {
+  state = { error: null };
+  static getDerivedStateFromError(error) {
+    return { error };
+  }
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="alert alert-danger m-3">
+          <h4>Error</h4>
+          <p>{this.state.error.message}</p>
+          <button
+            className="btn btn-primary"
+            onClick={() => this.setState({ error: null })}
+          >
+            Retry
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 function App() {
   return (
