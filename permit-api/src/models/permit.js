@@ -14,6 +14,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM('peddler', 'special'),
       allowNull: false
     },
+    application_date: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      validate: {
+        isDate: true
+      }
+    },
     issue_date: {
       type: DataTypes.DATE,
       allowNull: false,

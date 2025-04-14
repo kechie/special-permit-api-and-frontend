@@ -50,6 +50,7 @@ exports.getAllPermits = async (req, res) => {
       limit,
       offset,
       paranoid: true, // Respect soft deletes
+      order: [['application_date', 'ASC']], // Sort by application_date ascending
     });
 
     const totalPermits = await Permit.count({
