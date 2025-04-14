@@ -74,7 +74,7 @@ exports.createPermit = async (req, res) => {
   try {
     const permitData = req.body;
     // Optional: Add basic validation
-    if (!permitData.applicant_name || !permitData.permit_type || !permitData.issue_date || !permitData.expiration_date) {
+    if (!permitData.applicant_name || !permitData.permit_type || !permitData.application_date) {
       return res.status(400).json({ message: 'Missing required fields' });
     }
     const newPermit = await Permit.create(permitData);
