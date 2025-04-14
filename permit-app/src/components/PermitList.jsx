@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Form, InputGroup, Modal, Alert, Pagination } from 'react-bootstrap';
+import { Card, Table, Button, Form, InputGroup, Modal, Alert, Pagination } from 'react-bootstrap';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -142,108 +142,112 @@ const PermitList = () => {
 
   return (
     <div className="container mt-3">
-      <h3>Permits</h3>
-      <InputGroup className="mb-3">
-        <Form.Control
-          type="text"
-          placeholder="Search permits..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <Button variant="outline-secondary" onClick={handleSearch}>
-          Search
-        </Button>
-      </InputGroup>
+      <Card>
+        <Card.Body>
+          <Card.Title>Permits</Card.Title>
+          <InputGroup className="mb-3">
+            <Form.Control
+              type="text"
+              placeholder="Search permits..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <Button variant="outline-secondary" onClick={handleSearch}>
+              Search
+            </Button>
+          </InputGroup>
 
-      <Link to="/permits/new">
-        <Button variant="primary" className="mb-3">
-          Create Permit
-        </Button>
-      </Link>
+          <Link to="/permits/new">
+            <Button variant="primary" className="mb-3">
+              Create Permit
+            </Button>
+          </Link>
 
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Applicant</th>
-            <th>Type</th>
-            <th>Application Date</th>
-            <th>Issue Date</th>
-            <th>Expiration Date</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {permits.map((permit) => (
-            <tr key={permit.id}>
-              <td>{permit.applicant_name}</td>
-              <td>{permit.permit_type}</td>
-              <td>{formatDate(permit.application_date)}</td>
-              <td>{formatDate(permit.issue_date)}</td>
-              <td>{formatDate(permit.expiration_date)}</td>
-              <td>{permit.status}</td>
-              <td>
-                <Link to={`/permits/${permit.id}/edit`}>
-                  <Button variant="warning" className="me-2">
-                    Edit
-                  </Button>
-                </Link>
-                {(role === 'admin' || role === 'superadmin') && (
-                  <Button
-                    variant="danger"
-                    onClick={() => handleDelete(permit.id)}
-                    className="me-2"
-                  >
-                    Delete
-                  </Button>
-                )}
-                <Button
-                  variant="secondary"
-                  onClick={() => handleShowTopModal(permit.id)}
-                  className="me-2"
-                >
-                  Print TOP
-                </Button>
-                <Button
-                  variant="info"
-                  onClick={() => handleShowPermitModal(permit.id)}
-                >
-                  Print Permit
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>Applicant</th>
+                <th>Type</th>
+                <th>Application Date</th>
+                <th>Issue Date</th>
+                <th>Expiration Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {permits.map((permit) => (
+                <tr key={permit.id}>
+                  <td>{permit.applicant_name}</td>
+                  <td>{permit.permit_type}</td>
+                  <td>{formatDate(permit.application_date)}</td>
+                  <td>{formatDate(permit.issue_date)}</td>
+                  <td>{formatDate(permit.expiration_date)}</td>
+                  <td>{permit.status}</td>
+                  <td>
+                    <Link to={`/permits/${permit.id}/edit`}>
+                      <Button variant="warning" className="me-2">
+                        Edit
+                      </Button>
+                    </Link>
+                    {(role === 'admin' || role === 'superadmin') && (
+                      <Button
+                        variant="danger"
+                        onClick={() => handleDelete(permit.id)}
+                        className="me-2"
+                      >
+                        Delete
+                      </Button>
+                    )}
+                    <Button
+                      variant="secondary"
+                      onClick={() => handleShowTopModal(permit.id)}
+                      className="me-2"
+                    >
+                      Print TOP
+                    </Button>
+                    <Button
+                      variant="info"
+                      onClick={() => handleShowPermitModal(permit.id)}
+                    >
+                      Print Permit
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
 
-      {/* Pagination Component */}
-      <Pagination className="justify-content-center">
-        <Pagination.First
-          onClick={() => handlePageChange(1)}
-          disabled={currentPage === 1}
-        />
-        <Pagination.Prev
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        />
-        {[...Array(totalPages).keys()].map((page) => (
-          <Pagination.Item
-            key={page + 1}
-            active={page + 1 === currentPage}
-            onClick={() => handlePageChange(page + 1)}
-          >
-            {page + 1}
-          </Pagination.Item>
-        ))}
-        <Pagination.Next
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-        />
-        <Pagination.Last
-          onClick={() => handlePageChange(totalPages)}
-          disabled={currentPage === totalPages}
-        />
-      </Pagination>
+          {/* Pagination Component */}
+          <Pagination className="justify-content-center">
+            <Pagination.First
+              onClick={() => handlePageChange(1)}
+              disabled={currentPage === 1}
+            />
+            <Pagination.Prev
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            />
+            {[...Array(totalPages).keys()].map((page) => (
+              <Pagination.Item
+                key={page + 1}
+                active={page + 1 === currentPage}
+                onClick={() => handlePageChange(page + 1)}
+              >
+                {page + 1}
+              </Pagination.Item>
+            ))}
+            <Pagination.Next
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            />
+            <Pagination.Last
+              onClick={() => handlePageChange(totalPages)}
+              disabled={currentPage === totalPages}
+            />
+          </Pagination>
+        </Card.Body>
+      </Card>
 
       {/* Print TOP Modal */}
       <Modal
