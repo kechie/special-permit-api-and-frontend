@@ -45,9 +45,10 @@ function App() {
             {/* Public Routes */}
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
-            {/*             <Route path="/permits/:id/print-top" element={<PrintTop />} />
+            {/*             
+            <Route path="/permits/:id/print-top" element={<PrintTop />} />
             <Route path="/permits/:id/print" element={<PrintPermit />} />
- */}
+            */}
             {/* Protected Routes */}
             <Route path="/permits" element={<PrivateRoute element={<PermitList />} />} />
             <Route path="/permits/new" element={<PrivateRoute element={<PermitForm />} />} />

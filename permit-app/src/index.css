@@ -73,3 +73,76 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.permit-document {
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+}
+
+.permit-document h1,
+.permit-document h2 {
+  text-align: center;
+  text-transform: uppercase;
+  margin: 0.5em 0;
+}
+
+.permit-document .header {
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+.permit-document .field {
+  margin: 0.5em 0;
+}
+
+.permit-document .field strong {
+  display: inline-block;
+  width: 150px;
+}
+
+.permit-document .restrictions {
+  margin: 1em 0;
+  font-size: 0.9em;
+}
+
+.permit-document .signature {
+  margin-top: 2em;
+  text-align: right;
+}
+
+.permit-document .signature p {
+  margin: 0.2em 0;
+}
+
+@media print {
+  body>* {
+    display: none !important;
+  }
+
+  .modal.print-only {
+    display: block !important;
+  }
+
+  .modal.print-only .modal-dialog {
+    margin: 0;
+    width: 100%;
+  }
+
+  .modal.print-only .modal-content {
+    border: none;
+    box-shadow: none;
+  }
+
+  .modal.print-only .modal-header,
+  .modal.print-only .modal-footer {
+    display: none !important;
+  }
+
+  .modal.print-only .modal-body {
+    padding: 20px;
+  }
+
+  .modal.print-only .print-only-content {
+    display: block !important;
+  }
+}
