@@ -1,4 +1,3 @@
-// src/components/PermitForm.jsx
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Row, Col, Alert } from 'react-bootstrap';
 import axios from 'axios';
@@ -8,18 +7,20 @@ const PermitForm = () => {
   const [formData, setFormData] = useState({
     applicant_name: '',
     permit_type: 'peddler',
-    application_date: '', // Added
+    application_date: '',
     issue_date: '',
     expiration_date: '',
     status: 'pending',
     business_tax: '0.00',
-    mayors_permit_fee: '0.00',
-    individual_mayors_permit_fee: '0.00',
-    health_certificate: '0.00',
+    peddlers_tax: '181.50',
+    mayors_permit_fee: '181.50',
+    individual_mayors_permit_fee: '200.00', // Default for 1 employee
+    health_certificate: '200.00', // Default for 1 employee
     laboratory: '0.00',
-    sanitary_permit: '0.00',
-    garbage_fee: '0.00',
-    sticker_fee: '0.00',
+    sanitary_permit: '150.00',
+    garbage_fee: '150.00',
+    sticker_fee: '50.00',
+    number_of_employees: '1', // Default to 1
   });
 
   const [loading, setLoading] = useState(false);
@@ -46,13 +47,15 @@ const PermitForm = () => {
             issue_date: response.data.issue_date?.slice(0, 10) || '',
             expiration_date: response.data.expiration_date?.slice(0, 10) || '',
             business_tax: parseFloat(response.data.business_tax || 0).toFixed(2),
-            mayors_permit_fee: parseFloat(response.data.mayors_permit_fee || 0).toFixed(2),
-            individual_mayors_permit_fee: parseFloat(response.data.individual_mayors_permit_fee || 0).toFixed(2),
-            health_certificate: parseFloat(response.data.health_certificate || 0).toFixed(2),
+            peddlers_tax: parseFloat(response.data.peddlers_tax || 181.50).toFixed(2),
+            mayors_permit_fee: parseFloat(response.data.mayors_permit_fee || 181.50).toFixed(2),
+            individual_mayors_permit_fee: parseFloat(response.data.individual_mayors_permit_fee || 200.00).toFixed(2),
+            health_certificate: parseFloat(response.data.health_certificate || 200.00).toFixed(2),
             laboratory: parseFloat(response.data.laboratory || 0).toFixed(2),
-            sanitary_permit: parseFloat(response.data.sanitary_permit || 0).toFixed(2),
-            garbage_fee: parseFloat(response.data.garbage_fee || 0).toFixed(2),
-            sticker_fee: parseFloat(response.data.sticker_fee || 0).toFixed(2),
+            sanitary_permit: parseFloat(response.data.sanitary_permit || 150.00).toFixed(2),
+            garbage_fee: parseFloat(response.data.garbage_fee || 150.00).toFixed(2),
+            sticker_fee: parseFloat(response.data.sticker_fee || 50.00).toFixed(2),
+            number_of_employees: response.data.number_of_employees?.toString() || '1',
           };
           setFormData(formattedData);
         } catch (error) {
@@ -66,7 +69,46 @@ const PermitForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    if (name === 'permit_type') {
+      if (value === 'peddler') {
+        setFormData({
+          ...formData,
+          permit_type: value,
+          business_tax: '0.00',
+          peddlers_tax: '181.50',
+          mayors_permit_fee: '181.50',
+          individual_mayors_permit_fee: '200.00', // Fixed at 1 employee
+          health_certificate: '200.00', // Fixed at 1 employee
+          sanitary_permit: '150.00',
+          garbage_fee: '150.00',
+          sticker_fee: '50.00',
+          number_of_employees: '1', // Force to 1 for peddler
+        });
+      } else {
+        setFormData({
+          ...formData,
+          permit_type: value,
+          peddlers_tax: '0.00',
+          mayors_permit_fee: '0.00',
+          individual_mayors_permit_fee: '0.00',
+          health_certificate: '0.00',
+          sanitary_permit: '0.00',
+          garbage_fee: '0.00',
+          sticker_fee: '0.00',
+          number_of_employees: '1', // Reset for special, can be edited
+        });
+      }
+    } else if (name === 'number_of_employees' && formData.permit_type !== 'peddler') {
+      const employees = parseInt(value) || 1;
+      setFormData({
+        ...formData,
+        number_of_employees: value,
+        individual_mayors_permit_fee: (employees * 200).toFixed(2),
+        health_certificate: (employees * 200).toFixed(2),
+      });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -80,18 +122,23 @@ const PermitForm = () => {
       setLoading(false);
       return;
     }
-    //"{"applicant_name":"Johnny Smith","permit_type":"peddler","application_date":"2025-01-01","issue_date":"","expiration_date":"","status":"pending","business_tax":0,"mayors_permit_fee":0,"individual_mayors_permit_fee":0,"health_certificate":0,"laboratory":0,"sanitary_permit":0,"garbage_fee":0,"sticker_fee":0}"
-    // Validate required fields
+
     if (!formData.applicant_name || !formData.permit_type || !formData.application_date) {
       setError('All required fields must be filled');
       setLoading(false);
       return;
     }
 
-    // Format numeric fields
+    if (parseInt(formData.number_of_employees) < 1) {
+      setError('Number of employees must be at least 1');
+      setLoading(false);
+      return;
+    }
+
     const submitData = {
       ...formData,
       business_tax: parseFloat(formData.business_tax) || 0,
+      peddlers_tax: parseFloat(formData.peddlers_tax) || 0,
       mayors_permit_fee: parseFloat(formData.mayors_permit_fee) || 0,
       individual_mayors_permit_fee: parseFloat(formData.individual_mayors_permit_fee) || 0,
       health_certificate: parseFloat(formData.health_certificate) || 0,
@@ -99,6 +146,7 @@ const PermitForm = () => {
       sanitary_permit: parseFloat(formData.sanitary_permit) || 0,
       garbage_fee: parseFloat(formData.garbage_fee) || 0,
       sticker_fee: parseFloat(formData.sticker_fee) || 0,
+      number_of_employees: parseInt(formData.number_of_employees) || 1,
     };
 
     try {
@@ -119,6 +167,12 @@ const PermitForm = () => {
       setLoading(false);
     }
   };
+
+  const handleCancel = () => {
+    navigate('/permits');
+  };
+
+  const isPeddler = formData.permit_type === 'peddler';
 
   return (
     <div className="container mt-3">
@@ -214,6 +268,20 @@ const PermitForm = () => {
 
         <Row>
           <Col md={4}>
+            <Form.Group controlId="number_of_employees" className="mb-3">
+              <Form.Label>Number of Employees *</Form.Label>
+              <Form.Control
+                type="number"
+                min="1"
+                name="number_of_employees"
+                value={formData.number_of_employees}
+                onChange={handleChange}
+                required
+                disabled={loading || isPeddler}
+              />
+            </Form.Group>
+          </Col>
+          <Col md={4}>
             <Form.Group controlId="business_tax" className="mb-3">
               <Form.Label>Business Tax</Form.Label>
               <Form.Control
@@ -223,10 +291,27 @@ const PermitForm = () => {
                 name="business_tax"
                 value={formData.business_tax}
                 onChange={handleChange}
-                disabled={loading}
+                disabled={loading || isPeddler}
               />
             </Form.Group>
           </Col>
+          <Col md={4}>
+            <Form.Group controlId="peddlers_tax" className="mb-3">
+              <Form.Label>Peddlers Tax</Form.Label>
+              <Form.Control
+                type="number"
+                step="0.01"
+                min="0"
+                name="peddlers_tax"
+                value={formData.peddlers_tax}
+                onChange={handleChange}
+                disabled={loading || isPeddler}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Row>
           <Col md={4}>
             <Form.Group controlId="mayors_permit_fee" className="mb-3">
               <Form.Label>Mayor's Permit Fee</Form.Label>
@@ -237,7 +322,7 @@ const PermitForm = () => {
                 name="mayors_permit_fee"
                 value={formData.mayors_permit_fee}
                 onChange={handleChange}
-                disabled={loading}
+                disabled={loading || isPeddler}
               />
             </Form.Group>
           </Col>
@@ -251,13 +336,11 @@ const PermitForm = () => {
                 name="individual_mayors_permit_fee"
                 value={formData.individual_mayors_permit_fee}
                 onChange={handleChange}
-                disabled={loading}
+                disabled={loading || isPeddler}
+                readOnly
               />
             </Form.Group>
           </Col>
-        </Row>
-
-        <Row>
           <Col md={4}>
             <Form.Group controlId="health_certificate" className="mb-3">
               <Form.Label>Health Certificate</Form.Label>
@@ -268,10 +351,14 @@ const PermitForm = () => {
                 name="health_certificate"
                 value={formData.health_certificate}
                 onChange={handleChange}
-                disabled={loading}
+                disabled={loading || isPeddler}
+                readOnly
               />
             </Form.Group>
           </Col>
+        </Row>
+
+        <Row>
           <Col md={4}>
             <Form.Group controlId="laboratory" className="mb-3">
               <Form.Label>Laboratory</Form.Label>
@@ -282,7 +369,7 @@ const PermitForm = () => {
                 name="laboratory"
                 value={formData.laboratory}
                 onChange={handleChange}
-                disabled={loading}
+                disabled={loading || isPeddler}
               />
             </Form.Group>
           </Col>
@@ -296,14 +383,11 @@ const PermitForm = () => {
                 name="sanitary_permit"
                 value={formData.sanitary_permit}
                 onChange={handleChange}
-                disabled={loading}
+                disabled={loading || isPeddler}
               />
             </Form.Group>
           </Col>
-        </Row>
-
-        <Row>
-          <Col md={6}>
+          <Col md={4}>
             <Form.Group controlId="garbage_fee" className="mb-3">
               <Form.Label>Garbage Fee</Form.Label>
               <Form.Control
@@ -313,11 +397,14 @@ const PermitForm = () => {
                 name="garbage_fee"
                 value={formData.garbage_fee}
                 onChange={handleChange}
-                disabled={loading}
+                disabled={loading || isPeddler}
               />
             </Form.Group>
           </Col>
-          <Col md={6}>
+        </Row>
+
+        <Row>
+          <Col md={4}>
             <Form.Group controlId="sticker_fee" className="mb-3">
               <Form.Label>Sticker Fee</Form.Label>
               <Form.Control
@@ -327,264 +414,23 @@ const PermitForm = () => {
                 name="sticker_fee"
                 value={formData.sticker_fee}
                 onChange={handleChange}
-                disabled={loading}
+                disabled={loading || isPeddler}
               />
             </Form.Group>
           </Col>
         </Row>
 
-        <Button variant="primary" type="submit" disabled={loading}>
-          {loading ? 'Submitting...' : isEdit ? 'Update Permit' : 'Create Permit'}
-        </Button>
+        <div className="d-flex gap-2">
+          <Button variant="primary" type="submit" disabled={loading}>
+            {loading ? 'Submitting...' : isEdit ? 'Update Permit' : 'Create Permit'}
+          </Button>
+          <Button variant="secondary" onClick={handleCancel} disabled={loading}>
+            Cancel
+          </Button>
+        </div>
       </Form>
     </div>
   );
 };
 
 export default PermitForm;
-/*
-import React, { useState, useEffect } from 'react'
-import { Form, Button } from 'react-bootstrap'
-import axios from 'axios'
-import { useNavigate, useParams } from 'react-router-dom'
-
-const PermitForm = () => {
-  const [formData, setFormData] = useState({
-    applicant_name: '',
-    permit_type: 'peddler',
-    issue_date: '',
-    expiration_date: '',
-    status: 'pending',
-    business_tax: 0.00,
-    mayors_permit_fee: 0.00,
-    individual_mayors_permit_fee: 0.00,
-    health_certificate: 0.00,
-    laboratory: 0.00,
-    sanitary_permit: 0.00,
-    garbage_fee: 0.00,
-    sticker_fee: 0.00
-  })
-
-  const [loading, setLoading] = useState(false)
-  const [isEdit, setIsEdit] = useState(false)
-  const { id } = useParams()
-  const navigate = useNavigate()
-
-  const API_BASE_URL = 'http://localhost:3021/api'
-
-  useEffect(() => {
-    if (id) {
-      setIsEdit(true)
-      const fetchPermit = async () => {
-        try {
-          const token = localStorage.getItem('spclpermittoken')
-          const response = await axios.get(`${API_BASE_URL}/permits/${id}`, {
-            headers: { Authorization: `Bearer ${token}` }
-          })
-          const formattedData = {
-            ...response.data,
-            issue_date: response.data.issue_date?.slice(0, 10),
-            expiration_date: response.data.expiration_date?.slice(0, 10),
-          }
-          setFormData(formattedData)
-        } catch (error) {
-          console.error('Error fetching permit', error)
-        }
-      }
-      fetchPermit()
-    }
-  }, [id])
-
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData({ ...formData, [name]: value })
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-
-    const token = localStorage.getItem('spclpermittoken')
-
-    try {
-      if (isEdit) {
-        await axios.put(`${API_BASE_URL}/permits/${id}`, formData, {
-          headers: { Authorization: `Bearer ${token}` }
-        })
-      } else {
-        await axios.post(`${API_BASE_URL}/permits/`, formData, {
-          headers: { Authorization: `Bearer ${token}` }
-        })
-      }
-
-      setLoading(false)
-      navigate('/permits')
-    } catch (error) {
-      setLoading(false)
-      console.error('Error submitting permit', error)
-    }
-  }
-
-  return (
-    <div>
-      <h3>{isEdit ? 'Edit Permit' : 'Create Permit'}</h3>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="applicant_name">
-          <Form.Label>Applicant Name</Form.Label>
-          <Form.Control
-            type="text"
-            name="applicant_name"
-            value={formData.applicant_name}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group controlId="permit_type">
-          <Form.Label>Permit Type</Form.Label>
-          <Form.Control
-            as="select"
-            name="permit_type"
-            value={formData.permit_type}
-            onChange={handleChange}
-            required
-          >
-            <option value="peddler">Peddler</option>
-            <option value="special">Special</option>
-          </Form.Control>
-        </Form.Group>
-
-        <Form.Group controlId="issue_date">
-          <Form.Label>Issue Date</Form.Label>
-          <Form.Control
-            type="date"
-            name="issue_date"
-            value={formData.issue_date}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group controlId="expiration_date">
-          <Form.Label>Expiration Date</Form.Label>
-          <Form.Control
-            type="date"
-            name="expiration_date"
-            value={formData.expiration_date}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group controlId="status">
-          <Form.Label>Status</Form.Label>
-          <Form.Control
-            as="select"
-            name="status"
-            value={formData.status}
-            onChange={handleChange}
-          >
-            <option value="pending">Pending</option>
-            <option value="approved">Approved</option>
-            <option value="rejected">Rejected</option>
-          </Form.Control>
-        </Form.Group>
-
-        <Form.Group controlId="business_tax">
-          <Form.Label>Business Tax</Form.Label>
-          <Form.Control
-            type="number"
-            step="0.01"
-            name="business_tax"
-            value={formData.business_tax}
-            onChange={handleChange}
-          />
-        </Form.Group>
-
-        <Form.Group controlId="mayors_permit_fee">
-          <Form.Label>Mayor's Permit Fee</Form.Label>
-          <Form.Control
-            type="number"
-            step="0.01"
-            name="mayors_permit_fee"
-            value={formData.mayors_permit_fee}
-            onChange={handleChange}
-          />
-        </Form.Group>
-
-        <Form.Group controlId="individual_mayors_permit_fee">
-          <Form.Label>Individual Mayor's Permit Fee</Form.Label>
-          <Form.Control
-            type="number"
-            step="0.01"
-            name="individual_mayors_permit_fee"
-            value={formData.individual_mayors_permit_fee}
-            onChange={handleChange}
-          />
-        </Form.Group>
-
-        <Form.Group controlId="health_certificate">
-          <Form.Label>Health Certificate</Form.Label>
-          <Form.Control
-            type="number"
-            step="0.01"
-            name="health_certificate"
-            value={formData.health_certificate}
-            onChange={handleChange}
-          />
-        </Form.Group>
-
-        <Form.Group controlId="laboratory">
-          <Form.Label>Laboratory</Form.Label>
-          <Form.Control
-            type="number"
-            step="0.01"
-            name="laboratory"
-            value={formData.laboratory}
-            onChange={handleChange}
-          />
-        </Form.Group>
-
-        <Form.Group controlId="sanitary_permit">
-          <Form.Label>Sanitary Permit</Form.Label>
-          <Form.Control
-            type="number"
-            step="0.01"
-            name="sanitary_permit"
-            value={formData.sanitary_permit}
-            onChange={handleChange}
-          />
-        </Form.Group>
-
-        <Form.Group controlId="garbage_fee">
-          <Form.Label>Garbage Fee</Form.Label>
-          <Form.Control
-            type="number"
-            step="0.01"
-            name="garbage_fee"
-            value={formData.garbage_fee}
-            onChange={handleChange}
-          />
-        </Form.Group>
-
-        <Form.Group controlId="sticker_fee">
-          <Form.Label>Sticker Fee</Form.Label>
-          <Form.Control
-            type="number"
-            step="0.01"
-            name="sticker_fee"
-            value={formData.sticker_fee}
-            onChange={handleChange}
-          />
-        </Form.Group>
-
-        <Button variant="primary" type="submit" disabled={loading}>
-          {loading ? 'Submitting...' : isEdit ? 'Update Permit' : 'Create Permit'}
-        </Button>
-      </Form>
-    </div>
-  )
-}
-
-export default PermitForm
- */

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Form, InputGroup, Modal, Alert } from 'react-bootstrap';
+import { Table, Button, Form, InputGroup, Modal, Alert, Pagination } from 'react-bootstrap';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -13,28 +13,35 @@ const PermitList = () => {
   const [selectedPermit, setSelectedPermit] = useState(null);
   const [modalError, setModalError] = useState('');
   const [modalLoading, setModalLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [itemsPerPage] = useState(10); // Matches API limit
   const API_BASE_URL = 'http://localhost:3021/api';
 
-  const fetchPermits = async (search = '') => {
+  const fetchPermits = async (search = '', page = 1) => {
     try {
       const token = localStorage.getItem('spclpermittoken');
       const response = await axios.get(`${API_BASE_URL}/permits`, {
         headers: { Authorization: `Bearer ${token}` },
-        params: { search },
+        params: { search, page, limit: itemsPerPage },
       });
-      //console.log('API Response:', response.data);
       setPermits(response.data.permits);
+      setTotalPages(response.data.totalPages);
+      setCurrentPage(response.data.currentPage); // Sync with API
     } catch (err) {
       console.error('Error fetching permits:', err);
+      setPermits([]);
+      setTotalPages(1);
     }
   };
 
   useEffect(() => {
-    fetchPermits();
-  }, []);
+    fetchPermits(searchTerm, currentPage);
+  }, [currentPage]);
 
   const handleSearch = () => {
-    fetchPermits(searchTerm);
+    setCurrentPage(1); // Reset to page 1 on search
+    fetchPermits(searchTerm, 1);
   };
 
   const handleDelete = async (id) => {
@@ -43,7 +50,12 @@ const PermitList = () => {
       await axios.delete(`${API_BASE_URL}/permits/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setPermits(permits.filter((permit) => permit.id !== id));
+      // Refresh or adjust page
+      if (permits.length === 1 && currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+      } else {
+        fetchPermits(searchTerm, currentPage);
+      }
     } catch (err) {
       console.error('Error deleting permit:', err);
     }
@@ -100,6 +112,7 @@ const PermitList = () => {
   const calculateFeesPaid = (permit) => {
     const fees = [
       permit.business_tax,
+      permit.peddlers_tax, // Added
       permit.mayors_permit_fee,
       permit.individual_mayors_permit_fee,
       permit.health_certificate,
@@ -116,53 +129,19 @@ const PermitList = () => {
     return `${year}-${id.slice(0, 3).toUpperCase()}`;
   };
 
+  // Handle null dates
+  const formatDate = (date) => {
+    return date ? new Date(date).toLocaleDateString() : 'N/A';
+  };
+
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
   return (
     <div className="container mt-3">
-      <style>
-        {`
-          .permit-document {
-            font-family: Arial, sans-serif;
-            line-height: 1.5;
-          }
-          .permit-document h1, .permit-document h2 {
-            text-align: center;
-            text-transform: uppercase;
-            margin: 0.5em 0;
-          }
-          .permit-document .header {
-            text-align: center;
-            margin-bottom: 1em;
-          }
-          .permit-document .field {
-            margin: 0.5em 0;
-          }
-          .permit-document .field strong {
-            display: inline-block;
-            width: 150px;
-          }
-          .permit-document .restrictions {
-            margin: 1em 0;
-            font-size: 0.9em;
-          }
-          .permit-document .signature {
-            margin-top: 2em;
-            text-align: right;
-          }
-          .permit-document .signature p {
-            margin: 0.2em 0;
-          }
-          @media print {
-            body > * { display: none !important; }
-            .modal.print-only { display: block !important; }
-            .modal.print-only .modal-dialog { margin: 0; width: 100%; }
-            .modal.print-only .modal-content { border: none; box-shadow: none; }
-            .modal.print-only .modal-header,
-            .modal.print-only .modal-footer { display: none !important; }
-            .modal.print-only .modal-body { padding: 20px; }
-            .modal.print-only .print-only-content { display: block !important; }
-          }
-        `}
-      </style>
       <h3>Permits</h3>
       <InputGroup className="mb-3">
         <Form.Control
@@ -187,6 +166,7 @@ const PermitList = () => {
           <tr>
             <th>Applicant</th>
             <th>Type</th>
+            <th>Application Date</th>
             <th>Issue Date</th>
             <th>Expiration Date</th>
             <th>Status</th>
@@ -198,8 +178,9 @@ const PermitList = () => {
             <tr key={permit.id}>
               <td>{permit.applicant_name}</td>
               <td>{permit.permit_type}</td>
-              <td>{new Date(permit.issue_date).toLocaleDateString()}</td>
-              <td>{new Date(permit.expiration_date).toLocaleDateString()}</td>
+              <td>{formatDate(permit.application_date)}</td>
+              <td>{formatDate(permit.issue_date)}</td>
+              <td>{formatDate(permit.expiration_date)}</td>
               <td>{permit.status}</td>
               <td>
                 <Link to={`/permits/${permit.id}/edit`}>
@@ -235,6 +216,35 @@ const PermitList = () => {
         </tbody>
       </Table>
 
+      {/* Pagination Component */}
+      <Pagination className="justify-content-center">
+        <Pagination.First
+          onClick={() => handlePageChange(1)}
+          disabled={currentPage === 1}
+        />
+        <Pagination.Prev
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        />
+        {[...Array(totalPages).keys()].map((page) => (
+          <Pagination.Item
+            key={page + 1}
+            active={page + 1 === currentPage}
+            onClick={() => handlePageChange(page + 1)}
+          >
+            {page + 1}
+          </Pagination.Item>
+        ))}
+        <Pagination.Next
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        />
+        <Pagination.Last
+          onClick={() => handlePageChange(totalPages)}
+          disabled={currentPage === totalPages}
+        />
+      </Pagination>
+
       {/* Print TOP Modal */}
       <Modal
         show={showTopModal}
@@ -255,6 +265,10 @@ const PermitList = () => {
               <p>
                 <strong>Business Tax:</strong> ₱
                 {parseFloat(selectedPermit.business_tax).toFixed(2)}
+              </p>
+              <p>
+                <strong>Peddlers Tax:</strong> ₱
+                {parseFloat(selectedPermit.peddlers_tax).toFixed(2)}
               </p>
               <p>
                 <strong>Mayor's Permit Fee:</strong> ₱
@@ -284,6 +298,11 @@ const PermitList = () => {
                 <strong>Sticker Fee:</strong> ₱
                 {parseFloat(selectedPermit.sticker_fee).toFixed(2)}
               </p>
+              {selectedPermit.number_of_employees && (
+                <p>
+                  <strong>Number of Employees:</strong> {selectedPermit.number_of_employees}
+                </p>
+              )}
             </div>
           )}
         </Modal.Body>
@@ -335,13 +354,13 @@ const PermitList = () => {
                     (MASAPUL A SAAN NGA AGLAKO KEN AGI-DISPLAY ITI TAGILAKO NA ITI PAMPUBLIKO A KALSADA, DALAN, IGID TI KALSADA KEN ITI ANIAMAN A PASET TI TIENDAAN. MASAPUL PAY ITI NAIGET A PANANGSUROT ITI CITY ORDINANCE NO. 97-043 (OPLAN DALUS CODE). MALAKSID ITI DAYTA, MAIPARIT PAY NGA AGLAKO KEN MANGI-DISPLAY TI LAKO ITI RIZAL STREET, BONIFACIO STREET KEN SANGO TI CENTENNIAL ARENA.)
                   </p>
                   <p>
-                    This PERMIT shall neither be negotiable nor transferable and shall be valid only for the operation or conduct of the aforesaid business at the place given above for the period upon approval until {new Date(selectedPermit.expiration_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}.
+                    This PERMIT shall neither be negotiable nor transferable and shall be valid only for the operation or conduct of the aforesaid business at the place given above for the period upon approval until {formatDate(selectedPermit.expiration_date)}.
                   </p>
                   <p>
                     Should the application for the issuance of PERMIT be found to contain deceitful purpose, this PERMIT shall be considered null and void ab Initio.
                   </p>
                   <p>
-                    Given this {new Date(selectedPermit.issue_date).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })} at the City of Laoag, Philippines.
+                    Given this {formatDate(selectedPermit.issue_date)} at the City of Laoag, Philippines.
                   </p>
                   <div className="signature">
                     <p>MICHAEL MARCOS KEON</p>
@@ -355,8 +374,11 @@ const PermitList = () => {
                   <div className="field">
                     <p><strong>Fees Paid:</strong> Php {calculateFeesPaid(selectedPermit)}</p>
                     <p><strong>O.R. No.:</strong> 2847436</p>
-                    <p><strong>Issued on:</strong> {new Date(selectedPermit.issue_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                    <p><strong>Issued on:</strong> {formatDate(selectedPermit.issue_date)}</p>
                     <p><strong>Issued at:</strong> Laoag City</p>
+                    {selectedPermit.number_of_employees && (
+                      <p><strong>Number of Employees:</strong> {selectedPermit.number_of_employees}</p>
+                    )}
                   </div>
                 </>
               ) : (
@@ -370,7 +392,7 @@ const PermitList = () => {
                   </div>
                   <div className="field">
                     <p><strong>PERMIT NO:</strong> {formatPermitNo(selectedPermit.id)}</p>
-                    <p><strong>DATE:</strong> {new Date(selectedPermit.issue_date).toLocaleDateString()}</p>
+                    <p><strong>DATE:</strong> {formatDate(selectedPermit.issue_date)}</p>
                   </div>
                   <p>THIS CERTIFIES that</p>
                   <p>{selectedPermit.applicant_name}</p>
@@ -384,13 +406,18 @@ const PermitList = () => {
                     This permit is subject to the condition that all Laws, Ordinances, Resolutions, General Orders, Presidential Decrees, Letters of Instructions and Letters of Implementation governing the matter that shall be strictly complied with.
                   </p>
                   <p>
-                    VALID UP TO {new Date(selectedPermit.expiration_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                    VALID UP TO {formatDate(selectedPermit.expiration_date)}
                   </p>
                   <div className="signature">
                     <p>APPROVED:</p>
                     <p>MICHAEL MARCOS KEON</p>
                     <p>City Mayor</p>
                   </div>
+                  {selectedPermit.number_of_employees && (
+                    <div className="field">
+                      <p><strong>Number of Employees:</strong> {selectedPermit.number_of_employees}</p>
+                    </div>
+                  )}
                 </>
               )}
             </div>

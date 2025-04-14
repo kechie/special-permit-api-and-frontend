@@ -44,19 +44,24 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 0.00,
       validate: { min: 0 }
     },
+    peddlers_tax: {
+      type: DataTypes.DECIMAL(10, 2),
+      defaultValue: 181.50,
+      validate: { min: 0 }
+    },
     mayors_permit_fee: {
       type: DataTypes.DECIMAL(10, 2),
-      defaultValue: 0.00,
+      defaultValue: 200.00,
       validate: { min: 0 }
     },
     individual_mayors_permit_fee: {
       type: DataTypes.DECIMAL(10, 2),
-      defaultValue: 0.00,
+      defaultValue: 200.00,
       validate: { min: 0 }
     },
     health_certificate: {
       type: DataTypes.DECIMAL(10, 2),
-      defaultValue: 0.00,
+      defaultValue: 375.00,
       validate: { min: 0 }
     },
     laboratory: {
@@ -66,12 +71,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     sanitary_permit: {
       type: DataTypes.DECIMAL(10, 2),
-      defaultValue: 0.00,
+      defaultValue: 150.00,
       validate: { min: 0 }
     },
     garbage_fee: {
       type: DataTypes.DECIMAL(10, 2),
-      defaultValue: 0.00,
+      defaultValue: 150.00,
       validate: { min: 0 }
     },
     sticker_fee: {
