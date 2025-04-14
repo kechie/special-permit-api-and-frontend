@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card, Form, Button, Row, Col, Alert } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 
@@ -40,12 +40,24 @@ const Login = () => {
 
   if (isAuthenticated) {
     return (
-      <Card style={{ width: '36rem' }} className="mb-3 mx-auto">
+      <Card className="mb-3">
         <Card.Header>Special Permit Management</Card.Header>
         <Card.Body>
           <Card.Title>You are logged in</Card.Title>
-          <p>Would you like to log out?</p>
-          <Button variant="danger" onClick={handleLogout} disabled={loading}>
+          <p>Would you like to manage your permits or log out?</p>
+          <Button
+            as={Link}
+            to="/permits"
+            variant="primary"
+            className="me-2"
+          >
+            View Permits
+          </Button>
+          <Button
+            variant="outline-danger"
+            onClick={handleLogout}
+            disabled={loading}
+          >
             Logout
           </Button>
         </Card.Body>

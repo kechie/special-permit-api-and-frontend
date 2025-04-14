@@ -16,9 +16,9 @@ const HomeComponent = () => {
       <Card.Body>
         <Card.Title>Welcome to Special Permit Management</Card.Title>
         <Card.Text>
-          Streamline your permit application process with our easy-to-use platform.
-          Whether you're applying for a peddler or special permit, manage everything
-          from submission to approval in one place.
+          Manage peddler and special permits with ease. Submit applications, track
+          statuses, and handle fees like business tax, mayor’s permit, health
+          certificates, and more, all in one place.
           {isAuthenticated ? (
             <span>
               <br />
@@ -27,7 +27,7 @@ const HomeComponent = () => {
           ) : (
             <span>
               <br />
-              Log in to get started or learn more about our services.
+              Log in to create or view your permit applications.
             </span>
           )}
         </Card.Text>
