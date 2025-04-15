@@ -10,11 +10,18 @@ const Register = () => {
   const [username, setUsername] = useState('')
   const [error, setError] = useState('')
   const navigate = useNavigate()
+  const API_BASE_URL =
+    import.meta.env.VITE_NODE_ENV === 'production'
+      ? import.meta.env.VITE_BASE_API_URL_PROD
+      : import.meta.env.VITE_NODE_ENV === 'test'
+        ? import.meta.env.VITE_BASE_API_URL_TEST
+        : import.meta.env.VITE_BASE_API_URL_DEV;
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/register', { email, password, username })
+      //const response = await axios.post('http://localhost:5000/api/auth/register', { email, password, username })
+      const response = await axios.post(`${API_BASE_URL}/api/auth/register`, { email, password, username })
       localStorage.setItem('token', response.data.token) // Save the token
       navigate('/permits')
     } catch (err) {

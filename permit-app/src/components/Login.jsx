@@ -11,7 +11,14 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const { isAuthenticated, login, logout } = useAuth();
   const navigate = useNavigate();
-  const API_BASE_URL = 'http://localhost:3021/api';
+  //const API_BASE_URL = 'http://localhost:3021/api';
+  // Determine API URL based on environment
+  const API_BASE_URL =
+    import.meta.env.VITE_NODE_ENV === 'production'
+      ? import.meta.env.VITE_BASE_API_URL_PROD
+      : import.meta.env.VITE_NODE_ENV === 'test'
+        ? import.meta.env.VITE_BASE_API_URL_TEST
+        : import.meta.env.VITE_BASE_API_URL_DEV;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
