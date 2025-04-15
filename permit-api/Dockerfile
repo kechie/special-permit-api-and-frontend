@@ -25,6 +25,10 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     yarn install --production --frozen-lockfile
 
 # Run the application as a non-root user.
+# Commented out to use node-tls volume for the TLS certificate.
+# RUN addgroup -S app && adduser -S app -G app
+# TODO: fix permissions perhaps by copying the certificates to another volume and 
+# changing ownership there
 # USER node
 
 # Copy the rest of the source files into the image.
