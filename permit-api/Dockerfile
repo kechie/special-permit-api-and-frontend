@@ -34,4 +34,7 @@ COPY . .
 EXPOSE 3021
 
 # Run the application.
-CMD yarn start
+#CMD yarn start
+
+# Run the application with JSON syntax
+CMD ["yarn", "start"]

@@ -15,6 +15,7 @@ services:
       - ./.env
     environment:
       NODE_ENV: production
+    restart: unless-stopped
     ports:
       - 3021:3021
 
