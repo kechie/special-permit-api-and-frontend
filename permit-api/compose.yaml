@@ -18,6 +18,12 @@ services:
     restart: unless-stopped
     ports:
       - 3021:3021
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - node-tls:/node-tls
+    networks:
+      - prod-network
 
 volumes:
   node-tls:
