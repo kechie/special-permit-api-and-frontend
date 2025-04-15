@@ -1,15 +1,13 @@
-// src/App.jsx
-import React from 'react'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import Login from './components/Login'
-//import Register from './components/Register'
-import Home from './components/Home'
-import PermitList from './components/PermitList'
-import PermitForm from './components/PermitForm'
-import PrintTop from './components/PrintTop'
-import PrintPermit from './components/PrintPermit'
-import NavbarComponent from './components/PermitNavbar'
-import PrivateRoute from './components/PrivateRoute'
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Login from './components/Login';
+import Home from './components/Home';
+import PermitList from './components/PermitList';
+import PermitForm from './components/PermitForm';
+import PrintTop from './components/PrintTop';
+import PrintPermit from './components/PrintPermit';
+import NavbarComponent from './components/PermitNavbar';
+import PrivateRoute from './components/PrivateRoute';
 
 class ErrorBoundary extends React.Component {
   state = { error: null };
@@ -38,17 +36,13 @@ class ErrorBoundary extends React.Component {
 function App() {
   return (
     <ErrorBoundary>
-      <Router>
+      <Router basename="/spclpermits/"> {/* Add basename here */}
         <div className="container mt-3">
           <NavbarComponent />
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
-            {/*             
-            <Route path="/permits/:id/print-top" element={<PrintTop />} />
-            <Route path="/permits/:id/print" element={<PrintPermit />} />
-            */}
             {/* Protected Routes */}
             <Route path="/permits" element={<PrivateRoute element={<PermitList />} />} />
             <Route path="/permits/new" element={<PrivateRoute element={<PermitForm />} />} />
@@ -59,7 +53,7 @@ function App() {
         </div>
       </Router>
     </ErrorBoundary>
-  )
+  );
 }
 
-export default App
+export default App;
