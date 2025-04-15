@@ -71,7 +71,7 @@ const PermitForm = () => {
       };
       fetchPermit();
     }
-  }, [id]);
+  }, [id, API_BASE_URL]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
