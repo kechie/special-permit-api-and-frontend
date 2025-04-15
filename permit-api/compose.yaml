@@ -28,6 +28,7 @@ networks:
   prod-network:
     external: true
     name: prod-network
+
 # The following section is commented out to avoid starting a database by default.
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
@@ -61,4 +62,3 @@ networks:
 # secrets:
 #   db-password:
 #     file: db/password.txt
-
