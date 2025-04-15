@@ -23,5 +23,6 @@ sequelize.sync().then(() => {
     console.log(`Server is running on port ${API_PORT}`);
   });
 }).catch(err => {
+  console.log(sequelize)
   console.error('Unable to connect to the database:', err);
 });
