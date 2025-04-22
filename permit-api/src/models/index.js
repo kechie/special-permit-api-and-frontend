@@ -40,10 +40,14 @@ if (process.env.NODE_ENV === 'production') {
   sequelize.authenticate()
     .then(() => {
       console.log('Database connection established successfully.');
+
       return sequelize.sync({ force: false }); // Sync models after connection
     })
     .then(() => {
       console.log('Database synchronized successfully.');
+      console.log('API_PORT:', API_PORT);
+      console.log('NODE_ENV:', process.env.NODE_ENV);
+      console.log('Secure HTTP:', tlsOptions ? 'Enabled' : 'Disabled');
     })
     .catch((err) => {
       console.error('Failed to sync database:', err);

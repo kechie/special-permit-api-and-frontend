@@ -43,31 +43,43 @@ app.get('/', (req, res) => {
   );
 });
 
-// Sync database and start server
-sequelize
-  .authenticate() // Test connection before syncing
-  .then(() => {
-    console.log('Database connection established successfully.');
-    return sequelize.sync({ force: false }); // Sync models after connection
-  })
-  .then(() => {
-    console.log('Database synchronized successfully.');
-    console.log('API_PORT:', API_PORT);
-    console.log('NODE_ENV:', process.env.NODE_ENV);
-    console.log('Secure HTTP:', tlsOptions ? 'Enabled' : 'Disabled');
-
-    if (process.env.NODE_ENV === 'production') {
-      console.log('Running in production mode');
-      https.createServer(tlsOptions, app).listen(API_PORT, () => {
-        console.log(`Server is running on port ${API_PORT} with TLS`);
-      });
-    } else {
-      app.listen(API_PORT, () => {
-        console.log(`Server is running on port ${API_PORT} in ${process.env.NODE_ENV || 'development'} mode`);
-      });
-    }
-  })
-  .catch((err) => {
-    console.error('Error during database setup or server start:', err.message);
-    process.exit(1); // Exit on failure
+if (process.env.NODE_ENV === 'production') {
+  console.log('Running in production mode');
+  https.createServer(tlsOptions, app).listen(API_PORT, () => {
+    console.log(`Server is running on port ${API_PORT} with TLS`);
   });
+} else {
+  app.listen(API_PORT, () => {
+    console.log(`Server is running on port ${API_PORT} in ${process.env.NODE_ENV || 'development'} mode`);
+  });
+}
+
+
+// Sync database and start server
+//sequelize
+//  .authenticate() // Test connection before syncing
+//  .then(() => {
+//    console.log('Database connection established successfully.');
+//    return sequelize.sync({ force: false }); // Sync models after connection
+//  })
+//  .then(() => {
+//    console.log('Database synchronized successfully.');
+//    console.log('API_PORT:', API_PORT);
+//    console.log('NODE_ENV:', process.env.NODE_ENV);
+//    console.log('Secure HTTP:', tlsOptions ? 'Enabled' : 'Disabled');
+//
+//    if (process.env.NODE_ENV === 'production') {
+//      console.log('Running in production mode');
+//      https.createServer(tlsOptions, app).listen(API_PORT, () => {
+//        console.log(`Server is running on port ${API_PORT} with TLS`);
+//      });
+//    } else {
+//      app.listen(API_PORT, () => {
+//        console.log(`Server is running on port ${API_PORT} in ${process.env.NODE_ENV || 'development'} mode`);
+//      });
+//    }
+//  })
+//  .catch((err) => {
+//    console.error('Error during database setup or server start:', err.message);
+//    process.exit(1); // Exit on failure
+//  });
