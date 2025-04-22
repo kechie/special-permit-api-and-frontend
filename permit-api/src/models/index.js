@@ -22,11 +22,11 @@ db.AuditLog = require('./auditLog')(sequelize, Sequelize);
 // db.User.hasMany(db.AuditLog, { foreignKey: 'performed_by' }); // Not used since performed_by is a string
 
 // Sync database (development only)
-if (process.env.NODE_ENV !== 'production') {
-  sequelize.sync({ alter: true })
-    .then(() => console.log('Database synced'))
-    .catch((err) => console.error('Sync failed:', err));
-}
+// if (process.env.NODE_ENV !== 'production') {
+//   sequelize.sync({ alter: true })
+//     .then(() => console.log('Database synced'))
+//     .catch((err) => console.error('Sync failed:', err));
+// }
 
 // Sync database (production) for initializing the database
 // This is a one-time operation to set up the database schema
@@ -35,11 +35,24 @@ if (process.env.NODE_ENV !== 'production') {
 // the database schema. 
 // Uncomment the following lines if you want to sync the database in production
 // but be cautious as this will alter the database schema.
-//if (process.env.NODE_ENV === 'production') {
-//  sequelize.sync({ alter: true })
-//    .then(() => console.log('Database synced'))
-//    .catch((err) => console.error('Sync failed:', err));
-//}
+if (process.env.NODE_ENV === 'production') {
+  console.log('Running in production mode. Syncing database...');
+  sequelize.authenticate()
+    .then(() => {
+      console.log('Database connection established successfully.');
+      return sequelize.sync({ force: false }); // Sync models after connection
+    })
+    .then(() => {
+      console.log('Database synchronized successfully.');
+    })
+    .catch((err) => {
+      console.error('Failed to sync database:', err);
+    });
+} else {
+  sequelize.sync({ alter: true })
+    .then(() => console.log('Database synced'))
+    .catch((err) => console.error('Sync failed:', err));
+}
 
 module.exports = db;
 /* const { Sequelize } = require('sequelize');

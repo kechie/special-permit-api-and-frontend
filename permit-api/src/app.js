@@ -29,6 +29,7 @@ app.use(
     origin: process.env.ALLOWED_ORIGINS || '*',
   })
 );
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -67,6 +68,6 @@ sequelize
     }
   })
   .catch((err) => {
-    console.error('Error during database setup or server start:', err);
+    console.error('Error during database setup or server start:', err.message);
     process.exit(1); // Exit on failure
   });
