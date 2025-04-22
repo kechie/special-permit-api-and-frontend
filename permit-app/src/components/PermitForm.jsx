@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 const PermitForm = () => {
   const [formData, setFormData] = useState({
     applicant_name: '',
+    product_or_service: '',
     permit_type: 'peddler',
     application_date: '',
     issue_date: '',
@@ -16,7 +17,7 @@ const PermitForm = () => {
     mayors_permit_fee: '181.50',
     individual_mayors_permit_fee: '200.00', // Default for 1 employee
     health_certificate: '200.00', // Default for 1 employee
-    laboratory: '0.00',
+    laboratory: '375.00',
     sanitary_permit: '150.00',
     garbage_fee: '150.00',
     sticker_fee: '50.00',

@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    product_or_service: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     permit_type: {
       type: DataTypes.ENUM('peddler', 'special'),
       allowNull: false

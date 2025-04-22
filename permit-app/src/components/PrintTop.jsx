@@ -39,6 +39,7 @@ const PrintTop = () => {
     <div className="container mt-5">
       <h2>Tax Order of Payment</h2>
       <p><strong>Applicant:</strong> {permit.applicant_name}</p>
+      <p><strong>Product/Service:</strong>{permit.product_or_service}</p>
       <p><strong>Permit Type:</strong> {permit.permit_type}</p>
       <p><strong>Business Tax:</strong> ₱{permit.business_tax}</p>
       <p><strong>Mayor's Permit Fee:</strong> ₱{permit.mayors_permit_fee}</p>
@@ -48,6 +49,8 @@ const PrintTop = () => {
       <p><strong>Sanitary Permit:</strong> ₱{permit.sanitary_permit}</p>
       <p><strong>Garbage Fee:</strong> ₱{permit.garbage_fee}</p>
       <p><strong>Sticker Fee:</strong> ₱{permit.sticker_fee}</p>
+      <hr />
+      <p><strong>Amount Due:</strong>₱{permit.amount_due}</p>
     </div>
   )
 }
