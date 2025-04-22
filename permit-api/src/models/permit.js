@@ -9,6 +9,29 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    applicant_address: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    applicant_contact: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    applicant_email: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        isEmail: true
+      }
+    },
+    applicant_id_number: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    applicant_id_type: {
+      type: DataTypes.ENUM('government', 'school', 'company', 'other'),
+      allowNull: true
+    },
     product_or_service: {
       type: DataTypes.STRING,
       allowNull: false

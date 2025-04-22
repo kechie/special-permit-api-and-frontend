@@ -6,6 +6,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 const PermitForm = () => {
   const [formData, setFormData] = useState({
     applicant_name: '',
+    applicant_address: '', // Added
+    applicant_contact: '',
+    applicant_email: '',
+    applicant_id_number: '',
+    applicant_id_type: 'other',
     product_or_service: '',
     permit_type: 'peddler',
     application_date: '',
@@ -14,14 +19,17 @@ const PermitForm = () => {
     status: 'pending',
     business_tax: '0.00',
     peddlers_tax: '181.50',
-    mayors_permit_fee: '181.50',
-    individual_mayors_permit_fee: '200.00', // Default for 1 employee
-    health_certificate: '200.00', // Default for 1 employee
-    laboratory: '375.00',
+    mayors_permit_fee: '200.00',
+    individual_mayors_permit_fee: '200.00',
+    health_certificate: '375.00', // Updated default
+    laboratory: '0.00',
     sanitary_permit: '150.00',
     garbage_fee: '150.00',
-    sticker_fee: '50.00',
-    number_of_employees: '1', // Default to 1
+    sticker_fee: '0.00',
+    number_of_employees: '1',
+    amount_due: '0.00', // Added
+    amount_paid: '0.00', // Added
+    or_number: '', // Added
   });
 
   const [loading, setLoading] = useState(false);
@@ -180,6 +188,18 @@ const PermitForm = () => {
   };
 
   const isPeddler = formData.permit_type === 'peddler';
+  // Calculate total amount due
+  const amountDue = (
+    parseFloat(formData.business_tax) +
+    parseFloat(formData.peddlers_tax) +
+    parseFloat(formData.mayors_permit_fee) +
+    parseFloat(formData.individual_mayors_permit_fee) +
+    parseFloat(formData.health_certificate) +
+    parseFloat(formData.laboratory) +
+    parseFloat(formData.sanitary_permit) +
+    parseFloat(formData.garbage_fee) +
+    parseFloat(formData.sticker_fee)
+  ).toFixed(2);
 
   return (
     <div className="container mt-3">
@@ -214,6 +234,19 @@ const PermitForm = () => {
                 <option value="peddler">Peddler</option>
                 <option value="special">Special</option>
               </Form.Control>
+            </Form.Group>
+          </Col>
+          <Col md={12}>
+            <Form.Group controlId="applicant_address" className="mb-3">
+              <Form.Label>Applicant Address *</Form.Label>
+              <Form.Control
+                type="text"
+                name="applicant_address"
+                value={formData.applicant_address}
+                onChange={handleChange}
+                required
+                disabled={loading}
+              />
             </Form.Group>
           </Col>
         </Row>
@@ -426,7 +459,39 @@ const PermitForm = () => {
             </Form.Group>
           </Col>
         </Row>
-
+        <Row className="mt-3">
+          <Col md={6}>
+            <h4>Total Amount Due: ₱{amountDue}</h4>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={6}>
+            <Form.Group controlId="amount_paid" className="mb-3">
+              <Form.Label>Amount Paid</Form.Label>
+              <Form.Control
+                type="number"
+                step="0.01"
+                min="0"
+                name="amount_paid"
+                value={formData.amount_paid}
+                onChange={handleChange}
+                disabled={loading}
+              />
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group controlId="or_number" className="mb-3">
+              <Form.Label>OR Number</Form.Label>
+              <Form.Control
+                type="text"
+                name="or_number"
+                value={formData.or_number}
+                onChange={handleChange}
+                disabled={loading}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
         <div className="d-flex gap-2">
           <Button variant="primary" type="submit" disabled={loading}>
             {loading ? 'Submitting...' : isEdit ? 'Update Permit' : 'Save Permit'}

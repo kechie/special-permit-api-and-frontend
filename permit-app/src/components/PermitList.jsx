@@ -273,7 +273,7 @@ const PermitList = () => {
           {modalError && <Alert variant="danger">{modalError}</Alert>}
           {selectedPermit && !modalLoading && !modalError && (
             <div className="print-only-content">
-              <p><strong>Tax Order of Payment</strong></p>
+              <p><strong>Tax Order of Payment:</strong></p>
               <p><strong>Applicant:</strong> {selectedPermit.applicant_name}</p>
               <p><strong>Applying for:</strong> {capitalizeFirstLetter(selectedPermit.permit_type)}</p>
               <p>
@@ -312,9 +312,15 @@ const PermitList = () => {
                 <strong>Sticker Fee:</strong> ₱
                 {parseFloat(selectedPermit.sticker_fee).toFixed(2)}
               </p>
-              {selectedPermit.number_of_employees && (
+              {/*selectedPermit.number_of_employees && (
                 <p>
                   <strong>Number of Employees:</strong> {selectedPermit.number_of_employees}
+                </p>
+              )*/}
+              <hr />
+              {selectedPermit.amount_due && (
+                <p>
+                  <strong>Amount Due:</strong> ₱{selectedPermit.amount_due}
                 </p>
               )}
             </div>
@@ -354,7 +360,7 @@ const PermitList = () => {
                       <strong>PERMIT NO.:</strong> {formatPermitNo(selectedPermit.id)}
                     </p>
                     <p className="field">
-                      <strong>CART #</strong> 001
+                      <strong>CART #</strong>
                     </p>
                     {selectedPermit.status === 'renewed' && <p>RENEW</p>}
                     <h1>PEDDLER'S PERMIT</h1>
@@ -364,6 +370,7 @@ const PermitList = () => {
                   </p>
                   <p className="restrictions">
                     PROVIDED THAT THERE WILL BE NO SELLING AND DISPLAYING OF WARES AND GOODS ON THE PUBLIC ROADS, STREETS, SIDEWALKS/SIDEWAYS AND IN ANY PART OF THE MARKET. PROVIDED FURTHER, THAT CITY ORDINANCE NO. 97-043 (OPLAN DALUS CODE) SHALL BE STRICTLY COMPLIED WITH". FURTHERMORE, PROVIDED THAT THERE WILL BE NO SELLING AND DISPLAYING AT RIZAL STREET, BONIFACIO STREET AND INFRONT OF CENTENNIAL ARENA.
+                    <br />
                     <br />
                     (MASAPUL A SAAN NGA AGLAKO KEN AGI-DISPLAY ITI TAGILAKO NA ITI PAMPUBLIKO A KALSADA, DALAN, IGID TI KALSADA KEN ITI ANIAMAN A PASET TI TIENDAAN. MASAPUL PAY ITI NAIGET A PANANGSUROT ITI CITY ORDINANCE NO. 97-043 (OPLAN DALUS CODE). MALAKSID ITI DAYTA, MAIPARIT PAY NGA AGLAKO KEN MANGI-DISPLAY TI LAKO ITI RIZAL STREET, BONIFACIO STREET KEN SANGO TI CENTENNIAL ARENA.)
                   </p>
@@ -386,8 +393,8 @@ const PermitList = () => {
                     <p>City Administrator</p>
                   </div>
                   <div className="field">
-                    <p><strong>Fees Paid:</strong> Php {calculateFeesPaid(selectedPermit)}</p>
-                    <p><strong>O.R. No.:</strong> 2847436</p>
+                    <p><strong>Fees Paid:</strong> Php {selectedPermit.amount_paid}</p>
+                    <p><strong>O.R. No.:</strong> {/* or number*/}2847436</p>
                     <p><strong>Issued on:</strong> {formatDate(selectedPermit.issue_date)}</p>
                     <p><strong>Issued at:</strong> Laoag City</p>
                     {selectedPermit.number_of_employees && (
@@ -410,7 +417,7 @@ const PermitList = () => {
                   </div>
                   <p>THIS CERTIFIES that</p>
                   <p>{selectedPermit.applicant_name}</p>
-                  <p>Of Unknown Address, Laoag City, Ilocos Norte</p>
+                  <p>Of {/*selectedPermit.applicant_address*/} Laoag City, Ilocos Norte</p>
                   <p>Is engaged in selling of:</p>
                   <p>{selectedPermit.permit_type === 'special' ? 'FOOTWEAR/DRY GOODS' : 'UNKNOWN'}</p>
                   <p>AT Unknown Location, Laoag City, Ilocos Norte</p>

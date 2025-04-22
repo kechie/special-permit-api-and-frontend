@@ -24,7 +24,9 @@ const Login = () => {
     e.preventDefault();
     setError('');
     setLoading(true);
-
+    if (import.meta.env.VITE_NODE_ENV !== 'production') {
+      console.log('API_BASE_URL:', API_BASE_URL);
+    }
     try {
       const response = await axios.post(`${API_BASE_URL}/auth/login`, { email, password });
       if (!response.data.token) {
