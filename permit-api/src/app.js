@@ -67,6 +67,6 @@ sequelize
     }
   })
   .catch((err) => {
-    console.error('Error during database setup or server start:', err.message);
+    console.error('Error during database setup or server start:', err);
     process.exit(1); // Exit on failure
   });
