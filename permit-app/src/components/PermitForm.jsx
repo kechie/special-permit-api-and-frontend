@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Form, Button, Row, Col, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+//import user from '../../../permit-api/src/models/user';
 
 const PermitForm = () => {
   const [formData, setFormData] = useState({
+    user_id: '',
     applicant_name: '',
     applicant_address: '', // Added
     applicant_contact: '',
