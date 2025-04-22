@@ -28,12 +28,18 @@ if (process.env.NODE_ENV !== 'production') {
     .catch((err) => console.error('Sync failed:', err));
 }
 
-// Sync database (development only)
-if (process.env.NODE_ENV === 'production') {
-  sequelize.sync({ alter: true })
-    .then(() => console.log('Database synced'))
-    .catch((err) => console.error('Sync failed:', err));
-}
+// Sync database (production) for initializing the database
+// This is a one-time operation to set up the database schema
+// and should not be run in production environments.
+// In production, you should use migrations instead of syncing
+// the database schema. 
+// Uncomment the following lines if you want to sync the database in production
+// but be cautious as this will alter the database schema.
+//if (process.env.NODE_ENV === 'production') {
+//  sequelize.sync({ alter: true })
+//    .then(() => console.log('Database synced'))
+//    .catch((err) => console.error('Sync failed:', err));
+//}
 
 module.exports = db;
 /* const { Sequelize } = require('sequelize');
