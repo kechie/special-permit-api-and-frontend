@@ -40,8 +40,20 @@ if (process.env.NODE_ENV === 'production') {
   sequelize.authenticate()
     .then(() => {
       console.log('Database connection established successfully.');
-
-      return sequelize.sync({ force: false }); // Sync models after connection
+      return sequelize.sync({ force: false, alter: true });
+      // Sync models after connection
+      // remove alter: true to avoid altering the database schema
+      // force: false will not drop the tables
+      // force: true will drop the tables and recreate them
+      // alter: true will alter the tables to match the models
+      // This is useful for development but should be avoided in production
+      // unless you are sure about the changes
+      // force: true is not recommended in production
+      // because it will drop the tables and recreate them
+      // alter: true is not recommended in production
+      // because it will alter the tables to match the models
+      // This is useful for development but should be avoided in production
+      // unless you are sure about the changes
     })
     .then(() => {
       console.log('Database synchronized successfully.');
