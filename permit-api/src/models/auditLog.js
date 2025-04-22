@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     record_id: {
       type: DataTypes.UUID,
-      allowNull: false
+      allowNull: false // for VIEW actions a dummy UUID is used
     },
     changes: {
       type: DataTypes.JSON,

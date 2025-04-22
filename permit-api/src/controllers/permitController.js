@@ -86,14 +86,14 @@ exports.getAllPermits = async (req, res) => {
       paranoid: true,
     });
 
-    // Log VIEW action (optional, can skip for performance)
-    // await createAuditLog({
-    //   action: 'CREATE',
-    //   tableName: 'permits',
-    //   recordId: newPermit.id,
-    //   changes: { new: newPermit.toJSON() },
-    //   req
-    // });
+    //    Log VIEW action(optional, can skip for performance)
+    await createAuditLog({
+      action: 'VIEW',
+      tableName: 'permits',
+      recordId: '09ed8ed0-141f-4ed9-b494-65c1d940b67a', //dummy id
+      //changes: { new: newPermit.toJSON() },
+      req
+    });
 
     res.status(200).json({
       permits,
@@ -142,13 +142,14 @@ exports.getPermitById = async (req, res) => {
     }
 
     // Log VIEW action (optional, can skip for performance)
-    // await createAuditLog({
-    //   action: 'CREATE',
-    //   tableName: 'permits',
-    //   recordId: newPermit.id,
-    //   changes: { new: newPermit.toJSON() },
-    //   req
-    // });
+    await createAuditLog({
+      action: 'VIEW',
+      tableName: 'permits',
+      recordId: '09ed8ed0-141f-4ed9-b494-65c1d940b67a', //dummy id
+      //changes: { new: newPermit.toJSON() },
+      req
+    });
+
 
     res.status(200).json(permit);
   } catch (error) {
@@ -217,7 +218,7 @@ exports.deletePermit = async (req, res) => {
     }
 
     await createAuditLog({
-      action: 'CREATE',
+      action: 'DELETE',
       tableName: 'permits',
       recordId: newPermit.id,
       changes: { new: newPermit.toJSON() },
@@ -243,13 +244,13 @@ exports.getPermitAuditLogs = async (req, res) => {
       order: [['performed_at', 'DESC']],
     });
 
-    // await createAuditLog({
-    //   action: 'VIEW_LOGS',
-    //   tableName: 'permits',
-    //   recordId: id,
-    //   changes: { query: 'audit_logs' },
-    //   userId: req.user?.id
-    // });
+    await createAuditLog({
+      action: 'VIEW_LOGS',
+      tableName: 'permits',
+      recordId: '09ed8ed0-141f-4ed9-b494-65c1d940b67a', //dummy id
+      changes: { query: 'audit_logs' },
+      req
+    });
 
     res.status(200).json(logs);
   } catch (error) {

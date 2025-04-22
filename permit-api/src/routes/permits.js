@@ -20,4 +20,5 @@ router.put('/:id', verifyToken, validatePermit, permitController.updatePermit);
 // Delete a permit by ID
 router.delete('/:id', verifyToken, permitController.deletePermit);
 
+
 module.exports = router;

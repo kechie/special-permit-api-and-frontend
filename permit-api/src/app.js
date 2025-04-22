@@ -5,6 +5,7 @@ const https = require('https');
 const { sequelize } = require('./models');
 const authRoutes = require('./routes/auth');
 const permitRoutes = require('./routes/permits');
+const auditLogsRouter = require('./routes/auditLogs');
 
 const app = express();
 const API_PORT = process.env.API_PORT || 3021;
@@ -36,6 +37,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/permits', permitRoutes);
+app.use('/api/audit-logs', auditLogsRouter);
 
 app.get('/', (req, res) => {
   res.send(
@@ -53,33 +55,3 @@ if (process.env.NODE_ENV === 'production') {
     console.log(`Server is running on port ${API_PORT} in ${process.env.NODE_ENV || 'development'} mode`);
   });
 }
-
-
-// Sync database and start server
-//sequelize
-//  .authenticate() // Test connection before syncing
-//  .then(() => {
-//    console.log('Database connection established successfully.');
-//    return sequelize.sync({ force: false }); // Sync models after connection
-//  })
-//  .then(() => {
-//    console.log('Database synchronized successfully.');
-//    console.log('API_PORT:', API_PORT);
-//    console.log('NODE_ENV:', process.env.NODE_ENV);
-//    console.log('Secure HTTP:', tlsOptions ? 'Enabled' : 'Disabled');
-//
-//    if (process.env.NODE_ENV === 'production') {
-//      console.log('Running in production mode');
-//      https.createServer(tlsOptions, app).listen(API_PORT, () => {
-//        console.log(`Server is running on port ${API_PORT} with TLS`);
-//      });
-//    } else {
-//      app.listen(API_PORT, () => {
-//        console.log(`Server is running on port ${API_PORT} in ${process.env.NODE_ENV || 'development'} mode`);
-//      });
-//    }
-//  })
-//  .catch((err) => {
-//    console.error('Error during database setup or server start:', err.message);
-//    process.exit(1); // Exit on failure
-//  });
