@@ -28,6 +28,13 @@ if (process.env.NODE_ENV !== 'production') {
     .catch((err) => console.error('Sync failed:', err));
 }
 
+// Sync database (development only)
+if (process.env.NODE_ENV === 'production') {
+  sequelize.sync({ alter: true })
+    .then(() => console.log('Database synced'))
+    .catch((err) => console.error('Sync failed:', err));
+}
+
 module.exports = db;
 /* const { Sequelize } = require('sequelize');
 const config = require('../config/database.js')[process.env.NODE_ENV || 'development'];
