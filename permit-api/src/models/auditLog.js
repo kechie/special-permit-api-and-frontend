@@ -4,46 +4,36 @@ module.exports = (sequelize, DataTypes) => {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-    },
-    entity_type: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    entity_id: {
-      type: DataTypes.UUID,
-      allowNull: false,
+      primaryKey: true
     },
     action: {
-      type: DataTypes.ENUM('CREATE', 'UPDATE', 'DELETE', 'VIEW'),
-      allowNull: false,
-    },
-    performed_by: {
       type: DataTypes.STRING,
-      allowNull: true, // Stores username, null if not available
+      allowNull: false
+    },
+    table_name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    record_id: {
+      type: DataTypes.UUID,
+      allowNull: false
     },
     changes: {
-      type: DataTypes.JSONB,
-      allowNull: true,
+      type: DataTypes.JSON,
+      allowNull: true
     },
-    performed_at: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
+    performed_by_id: {  // Changed from performed_by string to UUID
+      type: DataTypes.UUID,
       allowNull: false,
-    },
-    ip_address: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
+      references: {
+        model: 'users',
+        key: 'id'
+      }
+    }
   }, {
-    timestamps: false,
-    paranoid: false,
-    underscored: true,
-    indexes: [
-      { fields: ['entity_type', 'entity_id'] },
-      { fields: ['performed_by'] },
-      { fields: ['performed_at'] },
-    ],
+    timestamps: true,
+    paranoid: true,
+    underscored: true
   });
 
   return AuditLog;

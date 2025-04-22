@@ -27,7 +27,7 @@ const PermitList = () => {
         ? import.meta.env.VITE_BASE_API_URL_TEST
         : import.meta.env.VITE_BASE_API_URL_DEV;
 
-  const fetchPermits = async (search = '', page = 1) => {
+  const fetchPermits = React.useCallback(async (search = '', page = 1) => {
     try {
       const token = localStorage.getItem('spclpermittoken');
       const response = await axios.get(`${API_BASE_URL}/permits`, {
@@ -42,11 +42,11 @@ const PermitList = () => {
       setPermits([]);
       setTotalPages(1);
     }
-  };
+  }, [API_BASE_URL, itemsPerPage]);
 
   useEffect(() => {
     fetchPermits(searchTerm, currentPage);
-  }, [currentPage]);
+  }, [currentPage, fetchPermits, searchTerm]);
 
   const handleSearch = () => {
     setCurrentPage(1); // Reset to page 1 on search
@@ -118,20 +118,21 @@ const PermitList = () => {
     window.print();
   };
 
-  const calculateFeesPaid = (permit) => {
-    const fees = [
-      permit.business_tax,
-      permit.peddlers_tax, // Added
-      permit.mayors_permit_fee,
-      permit.individual_mayors_permit_fee,
-      permit.health_certificate,
-      permit.laboratory,
-      permit.sanitary_permit,
-      permit.garbage_fee,
-      permit.sticker_fee,
-    ];
-    return fees.reduce((sum, fee) => sum + (parseFloat(fee) || 0), 0).toFixed(2);
-  };
+  /*   const calculateFeesPaid = (permit) => {
+      const fees = [
+        permit.business_tax,
+        permit.peddlers_tax, // Added
+        permit.mayors_permit_fee,
+        permit.individual_mayors_permit_fee,
+        permit.health_certificate,
+        permit.laboratory,
+        permit.sanitary_permit,
+        permit.garbage_fee,
+        permit.sticker_fee,
+      ];
+      return fees.reduce((sum, fee) => sum + (parseFloat(fee) || 0), 0).toFixed(2);
+    }; 
+  */
 
   const formatPermitNo = (id) => {
     const year = new Date().getFullYear();

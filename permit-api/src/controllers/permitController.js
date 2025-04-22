@@ -6,19 +6,15 @@ const { Op, Sequelize } = require('sequelize');
 const { Permit, AuditLog } = require('../models');
 
 // Helper function to create an audit log
-const createAuditLog = async ({ entityId, action, performedBy, changes, ipAddress }) => {
-  try {
-    await AuditLog.create({
-      entity_type: 'Permit',
-      entity_id: entityId,
-      action,
-      performed_by: performedBy || 'anonymous',
-      changes,
-      ip_address: ipAddress || null,
-    });
-  } catch (error) {
-    console.error('Error creating audit log:', error);
-  }
+// Example usage in a service
+const createAuditLog = async (action, tableName, recordId, changes, userId) => {
+  return await db.AuditLog.create({
+    action,
+    table_name: tableName,
+    record_id: recordId,
+    changes,
+    performed_by_id: userId  // Changed from username/email to user ID
+  });
 };
 
 // Get all permits
