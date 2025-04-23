@@ -67,7 +67,7 @@ const PermitForm = () => {
             peddlers_tax: parseFloat(response.data.peddlers_tax || 181.50).toFixed(2),
             mayors_permit_fee: parseFloat(response.data.mayors_permit_fee || 181.50).toFixed(2),
             individual_mayors_permit_fee: parseFloat(response.data.individual_mayors_permit_fee || 200.00).toFixed(2),
-            health_certificate: parseFloat(response.data.health_certificate || 200.00).toFixed(2),
+            health_certificate: parseFloat(response.data.health_certificate || 375.00).toFixed(2),
             laboratory: parseFloat(response.data.laboratory || 0).toFixed(2),
             sanitary_permit: parseFloat(response.data.sanitary_permit || 150.00).toFixed(2),
             garbage_fee: parseFloat(response.data.garbage_fee || 150.00).toFixed(2),
@@ -95,7 +95,7 @@ const PermitForm = () => {
           peddlers_tax: '181.50',
           mayors_permit_fee: '181.50',
           individual_mayors_permit_fee: '200.00', // Fixed at 1 employee
-          health_certificate: '200.00', // Fixed at 1 employee
+          health_certificate: '375.00', // Fixed at 1 employee
           sanitary_permit: '150.00',
           garbage_fee: '150.00',
           sticker_fee: '50.00',
@@ -120,8 +120,8 @@ const PermitForm = () => {
       setFormData({
         ...formData,
         number_of_employees: value,
-        individual_mayors_permit_fee: (employees * 200).toFixed(2),
-        health_certificate: (employees * 200).toFixed(2),
+        individual_mayors_permit_fee: (employees * 200.00).toFixed(2),
+        health_certificate: (employees * 375.00).toFixed(2),
       });
     } else {
       setFormData({ ...formData, [name]: value });
@@ -412,6 +412,7 @@ const PermitForm = () => {
                 value={formData.laboratory}
                 onChange={handleChange}
                 disabled={loading || isPeddler}
+                hidden
               />
             </Form.Group>
           </Col>

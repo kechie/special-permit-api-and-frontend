@@ -59,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     status: {
-      type: DataTypes.ENUM('pending', 'approved', 'rejected'),
+      type: DataTypes.ENUM('pending', 'approved', 'rejected', 'released'),
       defaultValue: 'pending'
     },
     business_tax: {
@@ -182,6 +182,12 @@ module.exports = (sequelize, DataTypes) => {
           Number(permit.garbage_fee || 0) +
           Number(permit.sticker_fee || 0)
         ).toFixed(2);
+        // Update status when payment is complete
+        if (permit.amount_paid &&
+          parseFloat(permit.amount_paid) >= parseFloat(permit.amount_due) &&
+          permit.or_number) {
+          permit.status = 'released';
+        }
       }
     }
   });

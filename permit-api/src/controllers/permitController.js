@@ -37,14 +37,15 @@ const createAuditLog = async ({ action, tableName, recordId, changes, req }) => 
   }
 };
 
-// Get all permits
+// Get all permits with pagination and search
 exports.getAllPermits = async (req, res) => {
   try {
     const page = Math.max(1, parseInt(req.query.page) || 1);
     const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 10));
     const offset = (page - 1) * limit;
     const search = req.query.search ? req.query.search.trim() : '';
-
+    const startDate = req.query.startDate ? new Date(req.query.startDate) : null;
+    const endDate = req.query.endDate ? new Date(req.query.endDate) : null;
     let whereCondition = {};
 
     if (search) {
@@ -52,7 +53,7 @@ exports.getAllPermits = async (req, res) => {
       const conditions = [];
 
       const validPermitTypes = ['peddler', 'special'];
-      const validStatuses = ['pending', 'approved', 'rejected'];
+      const validStatuses = ['pending', 'approved', 'rejected', 'released'];
 
       if (!isDate) {
         conditions.push({ applicant_name: { [Op.iLike]: `%${search}%` } });
@@ -62,23 +63,35 @@ exports.getAllPermits = async (req, res) => {
         if (validStatuses.includes(search.toLowerCase())) {
           conditions.push({ status: { [Op.eq]: search.toLowerCase() } });
         }
-      } else {
-        const searchDate = new Date(search);
-        conditions.push(
-          { issue_date: { [Op.eq]: searchDate } },
-          { expiration_date: { [Op.eq]: searchDate } }
-        );
       }
+      //commented out will use start and end date parameters
+      // } else {
+      //   const searchDate = new Date(search);
+      //   conditions.push(
+      //     { issue_date: { [Op.eq]: searchDate } },
+      //     { expiration_date: { [Op.eq]: searchDate } }
+      //   );
+      // }
 
       whereCondition = { [Op.or]: conditions };
     }
+    // If startDate and endDate are provided, filter by issue_date
+    if (startDate && endDate) {
+      whereCondition[Op.and] = [{
+        [Op.or]: [
+          //{ application_date: { [Op.between]: [startDate, endDate] } },
+          { issue_date: { [Op.between]: [startDate, endDate] } },
+          //{ expiration_date: { [Op.between]: [startDate, endDate] } }
+        ]
+      }];
+    }
 
-    const permits = await Permit.findAll({
+    const { count, rows } = await Permit.findAndCountAll({
       where: whereCondition,
       limit,
       offset,
       paranoid: true,
-      order: [['application_date', 'DESC']],
+      order: [['issue_date', 'DESC']],
     });
 
     const totalPermits = await Permit.count({
@@ -86,7 +99,7 @@ exports.getAllPermits = async (req, res) => {
       paranoid: true,
     });
 
-    //    Log VIEW action(optional, can skip for performance)
+    //    Log VIEW action(optional, can skip for performance perhaps disable in production)
     await createAuditLog({
       action: 'VIEW',
       tableName: 'permits',
@@ -96,9 +109,10 @@ exports.getAllPermits = async (req, res) => {
     });
 
     res.status(200).json({
-      permits,
+      permits: rows,
       totalPages: Math.ceil(totalPermits / limit),
       currentPage: page,
+      totalRecords: count
     });
   } catch (error) {
     console.error('Error retrieving permits:', error);
