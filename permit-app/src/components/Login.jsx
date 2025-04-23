@@ -32,8 +32,13 @@ const Login = () => {
       if (!response.data.token) {
         throw new Error('No token received from server');
       }
-      login(response.data.token, response.data.user.role || 'user');
-      navigate('/permits');
+      const userRole = login(response.data, response.data.token, response.data.user.role || 'user');
+      // Handle navigation based on role
+      if (userRole === 'monitor') {
+        navigate('/monitor');
+      } else {
+        navigate('/permits');
+      }
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Invalid credentials');
       setLoading(false);

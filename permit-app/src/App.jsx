@@ -6,8 +6,10 @@ import PermitList from './components/PermitList';
 import PermitForm from './components/PermitForm';
 import PrintTop from './components/PrintTop';
 import PrintPermit from './components/PrintPermit';
+import MonitorComponent from './components/Monitor';
 import NavbarComponent from './components/PermitNavbar';
 import PrivateRoute from './components/PrivateRoute';
+import { AuthProvider } from './context/AuthContext';
 
 class ErrorBoundary extends React.Component {
   state = { error: null };
@@ -33,25 +35,72 @@ class ErrorBoundary extends React.Component {
   }
 }
 
+const routeConfig = [
+  // Public routes
+  { path: '/', element: <Home />, public: true },
+  { path: '/login', element: <Login />, public: true },
+  // Admin/Staff routes
+  {
+    path: '/permits',
+    element: <PermitList />,
+    roles: ['superadmin', 'admin', 'staff']
+  },
+  {
+    path: '/permits/new',
+    element: <PermitForm />,
+    roles: ['superadmin', 'admin', 'staff']
+  },
+  {
+    path: '/permits/:id/edit',
+    element: <PermitForm />,
+    roles: ['superadmin', 'admin', 'staff']
+  },
+  {
+    path: '/permits/:id/print-top',
+    element: <PrintTop />,
+    roles: ['superadmin', 'admin', 'staff']
+  },
+  {
+    path: '/permits/:id/print',
+    element: <PrintPermit />,
+    roles: ['superadmin', 'admin', 'staff']
+  },
+  // Monitor-only route
+  {
+    path: '/monitor',
+    element: <MonitorComponent />,
+    roles: ['superadmin', 'monitor']
+  }
+];
+
 function App() {
   return (
     <ErrorBoundary>
-      <Router basename="/spclpermits/"> {/* Add basename here */}
-        <div className="container mt-3">
-          <NavbarComponent />
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            {/* Protected Routes */}
-            <Route path="/permits" element={<PrivateRoute element={<PermitList />} />} />
-            <Route path="/permits/new" element={<PrivateRoute element={<PermitForm />} />} />
-            <Route path="/permits/:id/edit" element={<PrivateRoute element={<PermitForm />} />} />
-            <Route path="/permits/:id/print-top" element={<PrivateRoute element={<PrintTop />} />} />
-            <Route path="/permits/:id/print" element={<PrivateRoute element={<PrintPermit />} />} />
-          </Routes>
-        </div>
-      </Router>
+      <AuthProvider>
+        <Router basename="/spclpermits/">
+          <div className="container mt-3">
+            <NavbarComponent />
+            <Routes>
+              {routeConfig.map(route => (
+                <Route
+                  key={route.path}
+                  path={route.path}
+                  element={
+                    route.public ? (
+                      route.element
+                    ) : (
+                      <PrivateRoute
+                        element={route.element}
+                        allowedRoles={route.roles}
+                      />
+                    )
+                  }
+                />
+              ))}
+            </Routes>
+          </div>
+        </Router>
+      </AuthProvider>
     </ErrorBoundary>
   );
 }
