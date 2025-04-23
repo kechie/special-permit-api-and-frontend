@@ -43,9 +43,17 @@ exports.getAllPermits = async (req, res) => {
     const page = Math.max(1, parseInt(req.query.page) || 1);
     const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 10));
     const offset = (page - 1) * limit;
+    console.log(req.query);
     const search = req.query.search ? req.query.search.trim() : '';
     const startDate = req.query.startDate ? new Date(req.query.startDate) : null;
     const endDate = req.query.endDate ? new Date(req.query.endDate) : null;
+    console.log('search:', search);
+    console.log('startDate:', startDate);
+    console.log('endDate:', endDate);
+    console.log('page:', page);
+    console.log('limit:', limit);
+    console.log('offset:', offset);
+
     let whereCondition = {};
 
     if (search) {

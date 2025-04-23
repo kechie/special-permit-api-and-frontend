@@ -39,13 +39,15 @@ const MonitorComponent = () => {
   const handleSearch = (event) => {
     event.preventDefault();
     setCurrentPage(1); // Reset to first page when searching
-    fetchPermits(searchTerm, 1);
-  };
-  // Add date filter handler
-  const handleDateFilter = () => {
-    setCurrentPage(1);
     fetchPermits(searchTerm, 1, startDate, endDate);
   };
+
+  // Add date filter handler
+  // const handleDateFilter = () => {
+  //   setCurrentPage(1);
+  //   fetchPermits(searchTerm, 1, startDate, endDate);
+  // };
+
   // Modify the fetchPermits function to include date filtering
   const fetchPermits = React.useCallback(async (search = '', page = 1, start = '', end = '') => {
     try {
@@ -78,7 +80,7 @@ const MonitorComponent = () => {
 
   useEffect(() => {
     fetchPermits(searchTerm, currentPage);
-  }, [currentPage, fetchPermits, searchTerm]);
+  }, [currentPage, fetchPermits, searchTerm, startDate, endDate]);
 
   return (
     <Card className="mb-3 mx-auto">
