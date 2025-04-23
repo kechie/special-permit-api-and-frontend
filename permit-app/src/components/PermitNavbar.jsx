@@ -3,7 +3,7 @@ import { Navbar, Nav } from 'react-bootstrap';
 import { useAuth } from '../context/AuthContext';
 
 const PermitNavbar = () => {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, hasRole, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -17,8 +17,14 @@ const PermitNavbar = () => {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
-          {/* <Nav.Link as={Link} to="/">Home</Nav.Link> */}
-          <Nav.Link as={Link} to="/permits">Permits</Nav.Link>
+        </Nav>
+        <Nav>
+          {/*hasRole(['superadmin', 'admin', 'staff']) && (
+            <Nav.Link as={Link} to="/permits/new">New Permit</Nav.Link>
+          )*/}
+          {hasRole(['superadmin', 'monitor']) && (
+            <Nav.Link as={Link} to="/monitor">Monitor</Nav.Link>
+          )}
         </Nav>
         <Nav>
           {isAuthenticated ? (

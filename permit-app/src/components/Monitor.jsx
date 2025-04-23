@@ -3,13 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const MonitorComponent = () => {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
+  /*   const handleLogout = () => {
+      logout();
+      navigate('/');
+    }; */
 
   return (
     <Card style={{ width: '36rem' }} className="mb-3 mx-auto">
