@@ -44,33 +44,33 @@ const routeConfig = [
   {
     path: '/permits',
     element: <PermitList />,
-    roles: ['superadmin', 'admin', 'staff']
+    roles: ['assessment', 'superadmin', 'admin', 'staff']
   },
   {
     path: '/permits/new',
     element: <PermitForm />,
-    roles: ['superadmin', 'admin', 'staff']
+    roles: ['assessment', 'superadmin', 'admin', 'staff']
   },
   {
     path: '/permits/:id/edit',
     element: <PermitForm />,
-    roles: ['superadmin', 'admin', 'staff']
+    roles: ['assessment', 'superadmin', 'admin', 'staff']
   },
   {
     path: '/permits/:id/print-top',
     element: <PrintTop />,
-    roles: ['superadmin', 'admin', 'staff']
+    roles: ['assessment', 'superadmin', 'admin', 'staff']
   },
   {
     path: '/permits/:id/print',
     element: <PrintPermit />,
-    roles: ['superadmin', 'admin', 'staff']
+    roles: ['assessment', 'superadmin', 'admin', 'staff']
   },
   // Monitor-only route
   {
     path: '/monitor',
     element: <MonitorComponent />,
-    roles: ['superadmin', 'monitor']
+    roles: ['superadmin', 'monitor', 'admin',]
   }
 ];
 
