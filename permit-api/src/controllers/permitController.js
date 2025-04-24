@@ -265,7 +265,7 @@ exports.getPermitAuditLogs = async (req, res) => {
       },
       order: [['performed_at', 'DESC']],
     });
-
+    //    Log VIEW_LOGS action(optional, can skip for performance perhaps disable in production)
     await createAuditLog({
       action: 'VIEW_LOGS',
       tableName: 'permits',
