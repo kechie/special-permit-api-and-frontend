@@ -1,6 +1,8 @@
 // models/index.js
+const fs = require('fs');
 const { Sequelize } = require('sequelize');
 const config = require('../config/database.js')[process.env.NODE_ENV || 'development'];
+
 let tlsOptions;
 if (process.env.NODE_ENV === 'production') {
   try {
@@ -13,6 +15,7 @@ if (process.env.NODE_ENV === 'production') {
     process.exit(1); // Exit if certificates are invalid
   }
 }
+
 const sequelize = new Sequelize(config.database, config.username, config.password, {
   host: config.host,
   dialect: config.dialect
