@@ -47,12 +47,13 @@ exports.getAllPermits = async (req, res) => {
     const search = req.query.search ? req.query.search.trim() : '';
     const startDate = req.query.startDate ? new Date(req.query.startDate) : null;
     const endDate = req.query.endDate ? new Date(req.query.endDate) : null;
-    console.log('search:', search);
-    console.log('startDate:', startDate);
-    console.log('endDate:', endDate);
-    console.log('page:', page);
-    console.log('limit:', limit);
-    console.log('offset:', offset);
+    const status = req.query.status ? req.query.status.trim() : '';
+    // console.log('search:', search);
+    // console.log('startDate:', startDate);
+    // console.log('endDate:', endDate);
+    // console.log('page:', page);
+    // console.log('limit:', limit);
+    // console.log('offset:', offset);
 
     let whereCondition = {};
 
@@ -242,8 +243,8 @@ exports.deletePermit = async (req, res) => {
     await createAuditLog({
       action: 'DELETE',
       tableName: 'permits',
-      recordId: newPermit.id,
-      changes: { new: newPermit.toJSON() },
+      recordId: existingPermit.id,
+      changes: { new: existingPermit.toJSON() },
       req
     });
 

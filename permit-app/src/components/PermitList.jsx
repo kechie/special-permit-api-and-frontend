@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from 'react';
+//import { Card, Table, Button, Form, InputGroup, Modal, Alert, Pagination, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Card, Table, Button, Form, InputGroup, Modal, Alert, Pagination } from 'react-bootstrap';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { capitalizeFirstLetter, formatDate } from '../utils/helpers';
+import {
+  Search,
+  PlusCircle,
+  Pencil,
+  Trash,
+  Printer,
+  Receipt
+} from 'react-bootstrap-icons';
 
 const PermitList = () => {
   const { role } = useAuth();
@@ -149,7 +158,11 @@ const PermitList = () => {
       setCurrentPage(page);
     }
   };
-
+  /*   const tooltip = (
+      <Tooltip id="tooltip">
+        <strong>Holy guacamole!</strong> Check this info.
+      </Tooltip>
+    ); */
   return (
     <div className="container mt-3">
       <Card>
@@ -163,13 +176,13 @@ const PermitList = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             <Button variant="outline-secondary" onClick={handleSearch}>
-              Search
+              <Search className="me-1" />Find
             </Button>
           </InputGroup>
 
           <Link to="/permits/new">
             <Button variant="primary" className="mb-3">
-              New Special Permit
+              <PlusCircle className="me-1" />New Permit
             </Button>
           </Link>
 
@@ -181,7 +194,8 @@ const PermitList = () => {
                 <th>Application Date</th>
                 <th>Issue Date</th>
                 <th>Expiration Date</th>
-                <th>Status</th>
+                <th>Amount Paid</th>
+                <th>OR Number</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -193,20 +207,29 @@ const PermitList = () => {
                   <td>{formatDate(permit.application_date)}</td>
                   <td>{formatDate(permit.issue_date)}</td>
                   <td>{formatDate(permit.expiration_date)}</td>
-                  <td>{capitalizeFirstLetter(permit.status)}</td>
+                  <td>{capitalizeFirstLetter(permit.amount_paid)}</td>
+                  <td>{permit.or_number}</td>
                   <td>
                     <Link to={`/permits/${permit.id}/edit`}>
+                      {/* <OverlayTrigger placement="left" overlay={tooltip}></OverlayTrigger> */}
                       <Button variant="warning" className="me-2">
-                        Edit
+                        <Pencil className="me-1" />{/* Edit */}
                       </Button>
+
                     </Link>
                     {(role === 'admin' || role === 'superadmin') && (
                       <Button
                         variant="danger"
                         onClick={() => handleDelete(permit.id)}
                         className="me-2"
+                        disabled={!!permit.amount_paid && !!permit.or_number}
+                        title={
+                          permit.amount_paid && permit.or_number
+                            ? "Cannot delete paid permits"
+                            : "Delete permit"
+                        }
                       >
-                        Delete
+                        <Trash className="me-1" />{/* Delete */}
                       </Button>
                     )}
                     <Button
@@ -214,13 +237,14 @@ const PermitList = () => {
                       onClick={() => handleShowTopModal(permit.id)}
                       className="me-2"
                     >
-                      Print TOP
+                      <Receipt className="me-1" />{/* Print TOP */}
                     </Button>
                     <Button
                       variant="info"
                       onClick={() => handleShowPermitModal(permit.id)}
                     >
-                      Print Permit
+                      <Printer className="me-1"
+                      />
                     </Button>
                   </td>
                 </tr>

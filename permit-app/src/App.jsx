@@ -8,6 +8,7 @@ import PrintTop from './components/PrintTop';
 import PrintPermit from './components/PrintPermit';
 import MonitorComponent from './components/Monitor';
 import NavbarComponent from './components/PermitNavbar';
+import Footer from './components/Footer';
 import PrivateRoute from './components/PrivateRoute';
 import { AuthProvider } from './context/AuthContext';
 
@@ -101,7 +102,9 @@ function App() {
           </div>
         </Router>
       </AuthProvider>
+      <Footer />
     </ErrorBoundary>
+
   );
 }
 
