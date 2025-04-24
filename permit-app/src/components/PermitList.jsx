@@ -127,31 +127,10 @@ const PermitList = () => {
     window.print();
   };
 
-  /*   const calculateFeesPaid = (permit) => {
-      const fees = [
-        permit.business_tax,
-        permit.peddlers_tax, // Added
-        permit.mayors_permit_fee,
-        permit.individual_mayors_permit_fee,
-        permit.health_certificate,
-        permit.laboratory,
-        permit.sanitary_permit,
-        permit.garbage_fee,
-        permit.sticker_fee,
-      ];
-      return fees.reduce((sum, fee) => sum + (parseFloat(fee) || 0), 0).toFixed(2);
-    }; 
-  */
-
   const formatPermitNo = (id) => {
     const year = new Date().getFullYear();
     return `${year}-${id.slice(0, 3).toUpperCase()}`;
   };
-
-  // Handle null dates
-  //const formatDate = (date) => {
-  //  return date ? new Date(date).toLocaleDateString() : 'N/A';
-  //};
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
@@ -210,13 +189,22 @@ const PermitList = () => {
                   <td>{capitalizeFirstLetter(permit.amount_paid)}</td>
                   <td>{permit.or_number}</td>
                   <td>
-                    <Link to={`/permits/${permit.id}/edit`}>
-                      {/* <OverlayTrigger placement="left" overlay={tooltip}></OverlayTrigger> */}
-                      <Button variant="warning" className="me-2">
-                        <Pencil className="me-1" />{/* Edit */}
-                      </Button>
+                    {(role === 'assessment' || role === 'admin' || role === 'superadmin') && (
+                      <Link to={`/permits/${permit.id}/edit`}>
+                        {/* <OverlayTrigger placement="left" overlay={tooltip}></OverlayTrigger> */}
+                        <Button
+                          variant="warning"
+                          className="me-2"
+                          disabled={!!permit.amount_paid && !!permit.or_number}
+                          title={permit.amount_paid && permit.or_number
+                            ? "Cannot delete paid permits"
+                            : "Edit permit"
+                          }>
+                          <Pencil className="me-1" />{/* Edit */}
+                        </Button>
 
-                    </Link>
+                      </Link>
+                    )}
                     {(role === 'admin' || role === 'superadmin') && (
                       <Button
                         variant="danger"
@@ -236,12 +224,14 @@ const PermitList = () => {
                       variant="secondary"
                       onClick={() => handleShowTopModal(permit.id)}
                       className="me-2"
+                      disabled={permit.amount_paid && permit.or_number}
                     >
                       <Receipt className="me-1" />{/* Print TOP */}
                     </Button>
                     <Button
                       variant="info"
                       onClick={() => handleShowPermitModal(permit.id)}
+                      className="me-2"
                     >
                       <Printer className="me-1"
                       />
