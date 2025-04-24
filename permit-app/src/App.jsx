@@ -6,7 +6,7 @@ import PermitList from './components/PermitList';
 import PermitForm from './components/PermitForm';
 import PrintTop from './components/PrintTop';
 import PrintPermit from './components/PrintPermit';
-import MonitorComponent from './components/Monitor';
+import MonitorComponent from './components/PermitMonitor';
 import NavbarComponent from './components/PermitNavbar';
 import Footer from './components/Footer';
 import PrivateRoute from './components/PrivateRoute';

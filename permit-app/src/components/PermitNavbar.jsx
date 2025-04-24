@@ -13,7 +13,15 @@ const PermitNavbar = () => {
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg" className="mb-3">
-      <Navbar.Brand as={Link} to="/">Permit App</Navbar.Brand>
+      <Navbar.Brand as={Link} to="/">
+        <img
+          src="CMO-seal-300x300.webp"
+          width="48"
+          height="48"
+          className="d-inline-block align-top"
+          alt="React Bootstrap logo"
+        />
+      </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">

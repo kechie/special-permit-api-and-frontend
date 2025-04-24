@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Form, Row, Col, Table, Pagination } from 'react-bootstrap';
+import { Button, Card, Form, InputGroup, Row, Col, Table, Pagination } from 'react-bootstrap';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import {
+  Search,
+  PlusCircle,
+  Pencil,
+  Trash,
+  Printer,
+  Receipt
+} from 'react-bootstrap-icons';
+
 import { useAuth } from '../context/AuthContext';
 import { capitalizeFirstLetter, formatDate } from '../utils/helpers';
 
@@ -86,47 +95,36 @@ const MonitorComponent = () => {
     <Card className="mb-3 mx-auto">
       <Card.Body>
         <Card.Title>Laoag City Treasury Office  - Special Permit Management Monitor Dasboard </Card.Title>
-        <Card.Text>
-          Monitor Dashboard for Special Permits
-        </Card.Text>
         {/* Add Search Form */}
         <Form onSubmit={handleSearch} className="mb-3">
-          <Row className="align-items-end">
-            <Col md={4}>
+          <Row>
+            <InputGroup className="mb-3">
+              <Col md={5}>
+                <Form.Group>
+                  <Form.Control
+                    type="text"
+                    placeholder="Find by applicant name or permit type"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={3}>
+                <Form.Group>
+                  <Form.Control
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                  />
+                </Form.Group>
+              </Col>
               <Form.Group>
-                <Form.Label>Search</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Search by applicant name or permit type"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </Form.Group>
-            </Col>
-            <Col md={3}>
-              <Form.Group>
-                <Form.Label>Start Date</Form.Label>
-                <Form.Control
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                />
-              </Form.Group>
-            </Col>
-            <Col md={3}>
-              <Form.Group>
-                <Form.Label>End Date</Form.Label>
                 <Form.Control
                   type="date"
                   value={endDate}
                   onChange={(e) => setEndStartDate(e.target.value)}
                 />
               </Form.Group>
-            </Col>
-            <Col md={2}>
-              <Button type="submit" variant="primary" className="me-2">
-                Search
-              </Button>
               <Button
                 variant="secondary"
                 onClick={() => {
@@ -138,8 +136,12 @@ const MonitorComponent = () => {
               >
                 Clear
               </Button>
-            </Col>
+              <Button type="submit" variant="primary" className="me-2">
+                Search
+              </Button>
+            </InputGroup>
           </Row>
+
         </Form>
         <Table striped bordered hover>
           <thead>
