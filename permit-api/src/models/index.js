@@ -1,7 +1,18 @@
 // models/index.js
 const { Sequelize } = require('sequelize');
 const config = require('../config/database.js')[process.env.NODE_ENV || 'development'];
-
+let tlsOptions;
+if (process.env.NODE_ENV === 'production') {
+  try {
+    tlsOptions = {
+      cert: fs.readFileSync(process.env.CERT_PATH || '/node-tls/fullchain.pem'),
+      key: fs.readFileSync(process.env.KEY_PATH || '/node-tls/privkey.pem'),
+    };
+  } catch (err) {
+    console.error('Failed to load TLS certificates:', err.message);
+    process.exit(1); // Exit if certificates are invalid
+  }
+}
 const sequelize = new Sequelize(config.database, config.username, config.password, {
   host: config.host,
   dialect: config.dialect
