@@ -10,19 +10,36 @@ const HomeComponent = () => {
     logout();
     navigate('/');
   };
-
+  const { role } = useAuth();
   return (
     <Card style={{ width: '36rem' }} className="mb-3 mx-auto">
       <Card.Body>
         <Card.Title>Welcome to Special Permit Management</Card.Title>
         <Card.Text>
-          Manage peddler and special permits with ease. Submit applications, track
-          statuses, and handle fees like business tax, mayor’s permit, health
-          certificates, and more, all in one place.
-          {isAuthenticated ? (
+          Manage peddler and special permits with ease.<br />
+          Submit applications, track statuses, and handle fees like business tax, mayor’s permit, health
+          certificates, and more, all in one place.<br />
+          {isAuthenticated ? ((role === 'monitor' || role === 'superadmin' || role === 'admin') ? (
             <span>
-              <br />
-              You're logged in—start managing your permits now!
+
+              <Button
+                as={Link}
+                to="/monitor"
+                variant="primary"
+                className="me-2"
+              >
+                Monitor
+              </Button>
+            </span>) :
+            <span>
+              <Button
+                as={Link}
+                to="/permits"
+                variant="primary"
+                className="me-2"
+              >
+                View Permits
+              </Button>
             </span>
           ) : (
             <span>
@@ -33,14 +50,6 @@ const HomeComponent = () => {
         </Card.Text>
         {isAuthenticated ? (
           <>
-            <Button
-              as={Link}
-              to="/permits"
-              variant="primary"
-              className="me-2"
-            >
-              View Permits
-            </Button>
             <Button
               variant="outline-danger"
               onClick={handleLogout}
