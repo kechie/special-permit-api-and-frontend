@@ -1,1 +1,3 @@
 .~lock*
+permit-app/.yarn/*
+permit-api/.yarn/*

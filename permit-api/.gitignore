@@ -1,7 +1,7 @@
 /.env
 .env
 .pnp.*
-.yarn/*
+
 /combined.log
 /error.log
 /exceptions.log
