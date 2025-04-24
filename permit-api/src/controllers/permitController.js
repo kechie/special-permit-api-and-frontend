@@ -43,7 +43,7 @@ exports.getAllPermits = async (req, res) => {
     const page = Math.max(1, parseInt(req.query.page) || 1);
     let limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 10));
     let offset = (page - 1) * limit;
-    console.log(req.query);
+    //console.log(req.query);
     const search = req.query.search ? req.query.search.trim() : '';
     const startDate = req.query.startDate ? new Date(req.query.startDate) : null;
     const endDate = req.query.endDate ? new Date(req.query.endDate) : null;
@@ -135,7 +135,7 @@ exports.getAllPermits = async (req, res) => {
 // Create a new permit
 exports.createPermit = async (req, res) => {
   try {
-    console.log(req.body);
+    //console.log(req.body);
     const permitData = req.body;
     if (!permitData.applicant_name || !permitData.permit_type || !permitData.application_date) {
       return res.status(400).json({ message: 'Missing required fields' });
