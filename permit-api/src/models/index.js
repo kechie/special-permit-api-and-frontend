@@ -68,7 +68,7 @@ if (process.env.NODE_ENV === 'production') {
     })
     .then(() => {
       console.log('Database synchronized successfully.');
-      console.log('API_PORT:', API_PORT);
+      console.log('API_PORT:', process.env.API_PORT);
       console.log('NODE_ENV:', process.env.NODE_ENV);
       console.log('Secure HTTP:', tlsOptions ? 'Enabled' : 'Disabled');
     })
