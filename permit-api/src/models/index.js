@@ -65,7 +65,7 @@ if (process.env.NODE_ENV === 'production') {
   sequelize.authenticate()
     .then(() => {
       console.log('Database connection established successfully.');
-      return sequelize.sync({ force: false, alter: true });
+      return sequelize.sync({ force: false, alter: false, logging: false });
       // Sync models after connection
       // remove alter: true to avoid altering the database schema
       // force: false will not drop the tables
@@ -90,7 +90,7 @@ if (process.env.NODE_ENV === 'production') {
       console.error('Failed to sync database:', err);
     });
 } else {
-  sequelize.sync({ alter: true })
+  sequelize.sync({ alter: true, logging: true })
     .then(() => console.log('Database synced'))
     .catch((err) => console.error('Sync failed:', err));
 }
