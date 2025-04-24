@@ -41,8 +41,8 @@ const createAuditLog = async ({ action, tableName, recordId, changes, req }) => 
 exports.getAllPermits = async (req, res) => {
   try {
     const page = Math.max(1, parseInt(req.query.page) || 1);
-    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 10));
-    const offset = (page - 1) * limit;
+    let limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 10));
+    let offset = (page - 1) * limit;
     console.log(req.query);
     const search = req.query.search ? req.query.search.trim() : '';
     const startDate = req.query.startDate ? new Date(req.query.startDate) : null;
@@ -93,6 +93,9 @@ exports.getAllPermits = async (req, res) => {
           //{ expiration_date: { [Op.between]: [startDate, endDate] } }
         ]
       }];
+      // Remove pagination when date range is provided
+      limit = null;
+      offset = null;
     }
 
     const { count, rows } = await Permit.findAndCountAll({
