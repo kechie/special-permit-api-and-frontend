@@ -15,13 +15,14 @@ import { useAuth } from '../context/AuthContext';
 import { capitalizeFirstLetter, formatDate } from '../utils/helpers';
 
 const MonitorComponent = () => {
-  const { isAuthenticated } = useAuth();
+  //  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
+  /*   const handleLogout = () => {
+      logout();
+      navigate('/');
+    };
+   */
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
