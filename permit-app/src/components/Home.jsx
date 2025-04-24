@@ -21,7 +21,6 @@ const HomeComponent = () => {
           certificates, and more, all in one place.<br />
           {isAuthenticated ? ((role === 'monitor' || role === 'superadmin' || role === 'admin') ? (
             <span>
-
               <Button
                 as={Link}
                 to="/monitor"
