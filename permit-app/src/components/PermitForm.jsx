@@ -120,8 +120,8 @@ const PermitForm = () => {
       setFormData({
         ...formData,
         number_of_employees: value,
-        individual_mayors_permit_fee: (employees * 200.00).toFixed(2),
-        health_certificate: (employees * 375.00).toFixed(2),
+        individual_mayors_permit_fee: (employees * 200.00).toFixed(2) + (200.00),
+        health_certificate: (employees * 375.00).toFixed(2) + (375.00),
       });
     } else {
       setFormData({ ...formData, [name]: value });

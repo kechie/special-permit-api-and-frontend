@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Form, InputGroup, Row, Col, Table, Pagination } from 'react-bootstrap';
+import { utils as XLSXUtils, write as XLSXWrite } from 'xlsx';
+import { FileEarmarkExcel } from 'react-bootstrap-icons';
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
+//import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Search,
   PlusCircle,
@@ -11,24 +14,24 @@ import {
   Receipt
 } from 'react-bootstrap-icons';
 
-import { useAuth } from '../context/AuthContext';
+//import { useAuth } from '../context/AuthContext';
 import { capitalizeFirstLetter, formatDate } from '../utils/helpers';
 
 const MonitorComponent = () => {
   //  const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   /*   const handleLogout = () => {
       logout();
       navigate('/');
     };
    */
-  const handlePageChange = (page) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
-  const { role } = useAuth();
+  /*   const handlePageChange = (page) => {
+      if (page >= 1 && page <= totalPages) {
+        setCurrentPage(page);
+      }
+    }; */
+  //const { role } = useAuth();
   const [permits, setPermits] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [startDate, setStartDate] = useState('');
@@ -50,6 +53,47 @@ const MonitorComponent = () => {
     event.preventDefault();
     setCurrentPage(1); // Reset to first page when searching
     fetchPermits(searchTerm, 1, startDate, endDate);
+  };
+  // Add export to Excel handler
+  const handleExportToExcel = () => {
+    // Transform data for export
+    const exportData = permits.map(permit => ({
+      'Applicant Name': permit.applicant_name,
+      'Permit Type': capitalizeFirstLetter(permit.permit_type),
+      'Application Date': formatDate(permit.application_date),
+      'Issue Date': formatDate(permit.issue_date),
+      'Expiration Date': formatDate(permit.expiration_date),
+      'Amount Due': `₱${permit.amount_due}`,
+      'Amount Paid': `₱${permit.amount_paid || '0.00'}`,
+      'OR Number': permit.or_number || '',
+      'Status': capitalizeFirstLetter(permit.status)
+    }));
+
+    // Create worksheet
+    const ws = XLSXUtils.json_to_sheet(exportData);
+    const wb = XLSXUtils.book_new();
+    XLSXUtils.book_append_sheet(wb, ws, 'Permits');
+
+    // Generate filename with current date
+    const fileName = `permits_${new Date().toISOString().split('T')[0]}.xlsx`;
+
+    // Save file
+    const wbout = XLSXWrite(wb, { bookType: 'xlsx', type: 'binary' });
+    const blob = new Blob([s2ab(wbout)], { type: 'application/octet-stream' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
+  // Helper function to convert string to array buffer
+  const s2ab = (s) => {
+    const buf = new ArrayBuffer(s.length);
+    const view = new Uint8Array(buf);
+    for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+    return buf;
   };
 
   // Add date filter handler
@@ -144,6 +188,17 @@ const MonitorComponent = () => {
           </Row>
 
         </Form>
+        {/* Download as excel button */}
+        <div className="d-flex justify-content-end mb-3">
+          <Button
+            variant="success"
+            onClick={handleExportToExcel}
+            disabled={permits.length === 0}
+          >
+            <FileEarmarkExcel className="me-1" />
+            Export to Excel
+          </Button>
+        </div>
         <Table striped bordered hover>
           <thead>
             <tr>
@@ -205,7 +260,7 @@ const MonitorComponent = () => {
           </tbody>
         </Table>
 
-        {/* Pagination Component */}
+        {/* Pagination Component 
         <Pagination className="justify-content-center">
           <Pagination.First
             onClick={() => handlePageChange(1)}
@@ -232,7 +287,7 @@ const MonitorComponent = () => {
             onClick={() => handlePageChange(totalPages)}
             disabled={currentPage === totalPages}
           />
-        </Pagination>
+        </Pagination>*/}
       </Card.Body >
     </Card >
   );
