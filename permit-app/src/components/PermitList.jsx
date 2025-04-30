@@ -1,6 +1,16 @@
+//file PermitList.jsx
+// PermitList.jsx
+// This file contains the PermitList component, which displays a list of permits
+// and allows users to search, create, edit, and delete permits.
+// It also includes modals for printing the Tax Order of Payment (TOP) and the permit itself.
+//
+// It uses React, React Router, and Bootstrap for styling and layout.
+// It also uses axios for making API requests and qrcode.react for generating QR codes.
+//
 import React, { useEffect, useState } from 'react';
 //import { Card, Table, Button, Form, InputGroup, Modal, Alert, Pagination, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Card, Table, Button, Form, InputGroup, Modal, Alert, Pagination } from 'react-bootstrap';
+import { QRCodeSVG } from 'qrcode.react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -11,11 +21,12 @@ import {
   Pencil,
   Trash,
   Printer,
-  Receipt
+  Receipt,
+  Justify
 } from 'react-bootstrap-icons';
 import laoagLogo from '../assets/laoag-logo.png';
 import BPLOLogo from '../assets/bplo-logo.png';
-
+import MMKSig from '../assets/mmk-sig.png';
 const PermitList = () => {
   const { role } = useAuth();
   const [permits, setPermits] = useState([]);
@@ -139,6 +150,19 @@ const PermitList = () => {
       setCurrentPage(page);
     }
   };
+
+  // Add QR code generator function
+  const generateQRValue = (permit) => {
+    return JSON.stringify({
+      permitNo: formatPermitNo(permit.id),
+      name: permit.applicant_name,
+      type: permit.permit_type,
+      issued: permit.issue_date,
+      expires: permit.expiration_date,
+      or: permit.or_number
+    });
+  };
+
   /*   const tooltip = (
       <Tooltip id="tooltip">
         <strong>Holy guacamole!</strong> Check this info.
@@ -373,49 +397,55 @@ const PermitList = () => {
             <div className="print-only-content permit-document">
               {selectedPermit.permit_type === 'peddler' ? (
                 <>
-                  <div className="header">
-                    <p className="field">
-                      <strong>PERMIT NO.:</strong> {formatPermitNo(selectedPermit.id)}
-                    </p>
-                    <p className="field">
-                      <strong>CART #</strong> {formatPermitNo(selectedPermit.id) + " - 1"}
-                    </p>
-                    {/*selectedPermit.status === 'renewed' && <p>RENEW</p>*/}
-                    <h1>PEDDLER'S PERMIT</h1>
+                  <div className="header permit-header">
+                    <div className="logo-container">
+                      <img src={laoagLogo} alt="Laoag City Logo" className="header-logo" />
+                    </div>
+                    <div className="header">
+                      <h2>REPUBLIC OF THE PHILIPPINES</h2>
+                      <h2>Province of Ilocos Norte</h2>
+                      <p>OFFICE OF THE CITY MAYOR</p>
+                      <p>BUSINESS PERMIT AND LICENSING OFFICE</p>
+                    </div>
+                    <div className="logo-container">
+                      <img src={BPLOLogo} alt="BPLO Logo" className="header-logo" />
+                    </div>
+                  </div><div className='field'>
+                    <strong>PERMIT NO.:</strong> {formatPermitNo(selectedPermit.id)}<br />
+                    <strong>CART #</strong> {formatPermitNo(selectedPermit.id) + " - 1"}
+                    <h2 align="center">PEDDLER'S PERMIT</h2>
                   </div>
-                  <p>In accordance with the provisions of the Revenue Code of the City of Laoag, PERMIT is hereby granted to {selectedPermit.applicant_name}, of Unknown Address, Laoag City to conduct his/her business generally known as: PEDDLER (Barangay): to sell {selectedPermit.permit_type === 'peddler' ? AllCapitalize(selectedPermit.product_or_service) : 'UNKNOWN'} in the City of Laoag, subject to the rules and regulations prescribed in said Revenue Code and all existing laws applicable thereto:</p>
-                  <p className="restrictions" style={{ paddingLeft: '2rem', paddingRight: '2rem' }}>PROVIDED THAT THERE WILL BE NO SELLING AND DISPLAYING OF WARES AND GOODS ON THE PUBLIC ROADS, STREETS, SIDEWALKS/SIDEWAYS AND IN ANY PART OF THE MARKET. PROVIDED FURTHER, THAT CITY ORDINANCE NO. 97-043 (OPLAN DALUS CODE) SHALL BE STRICTLY COMPLIED WITH". FURTHERMORE, PROVIDED THAT THERE WILL BE NO SELLING AND DISPLAYING AT RIZAL STREET, BONIFACIO STREET AND INFRONT OF CENTENNIAL ARENA.</p>
-                  <p className="restrictions" style={{ paddingLeft: '2rem', paddingRight: '2rem' }}>(MASAPUL A SAAN NGA AGLAKO KEN AGI-DISPLAY ITI TAGILAKO NA ITI PAMPUBLIKO A KALSADA, DALAN, IGID TI KALSADA KEN ITI ANIAMAN A PASET TI TIENDAAN. MASAPUL PAY ITI NAIGET A PANANGSUROT ITI CITY ORDINANCE NO. 97-043 (OPLAN DALUS CODE). MALAKSID ITI DAYTA, MAIPARIT PAY NGA AGLAKO KEN MANGI-DISPLAY TI LAKO ITI RIZAL STREET, BONIFACIO STREET KEN SANGO TI CENTENNIAL ARENA.)</p>
-                  <p>This PERMIT shall neither be negotiable nor transferable and shall be valid only for the operation or conduct of the aforesaid business at the place given above for the period upon approval until {formatDate(selectedPermit.expiration_date)}.</p>
-                  <p>
-                    Should the application for the issuance of PERMIT be found to contain deceitful purpose, this PERMIT shall be considered null and void ab Initio.
-                  </p>
-                  <p>
-                    Given this {formatDate(selectedPermit.issue_date)} at the City of Laoag, Philippines.
-                  </p>
+                  {/*selectedPermit.status === 'renewed' && <p>RENEW</p>*/}
+                  <p align="justify">In accordance with the provisions of the Revenue Code of the City of Laoag, PERMIT is hereby granted to {selectedPermit.applicant_name}, of {selectedPermit.applicant_address}, Laoag City to conduct his/her business generally known as: PEDDLER (Barangay): to sell {selectedPermit.permit_type === 'peddler' ? AllCapitalize(selectedPermit.product_or_service) : 'UNKNOWN'} in the City of Laoag, subject to the rules and regulations prescribed in said Revenue Code and all existing laws applicable thereto:</p>
+                  <p className="restrictions" style={{ paddingLeft: '2rem', paddingRight: '2rem', align: Justify }}>PROVIDED THAT THERE WILL BE NO SELLING AND DISPLAYING OF WARES AND GOODS ON THE PUBLIC ROADS, STREETS, SIDEWALKS/SIDEWAYS AND IN ANY PART OF THE MARKET. PROVIDED FURTHER, THAT CITY ORDINANCE NO. 97-043 (OPLAN DALUS CODE) SHALL BE STRICTLY COMPLIED WITH". FURTHERMORE, PROVIDED THAT THERE WILL BE NO SELLING AND DISPLAYING AT RIZAL STREET, BONIFACIO STREET AND INFRONT OF CENTENNIAL ARENA.</p>
+                  <p className="restrictions" style={{ paddingLeft: '2rem', paddingRight: '2rem', align: Justify }}>(MASAPUL A SAAN NGA AGLAKO KEN AGI-DISPLAY ITI TAGILAKO NA ITI PAMPUBLIKO A KALSADA, DALAN, IGID TI KALSADA KEN ITI ANIAMAN A PASET TI TIENDAAN. MASAPUL PAY ITI NAIGET A PANANGSUROT ITI CITY ORDINANCE NO. 97-043 (OPLAN DALUS CODE). MALAKSID ITI DAYTA, MAIPARIT PAY NGA AGLAKO KEN MANGI-DISPLAY TI LAKO ITI RIZAL STREET, BONIFACIO STREET KEN SANGO TI CENTENNIAL ARENA.)</p>
+                  <p align="justify">This PERMIT shall neither be negotiable nor transferable and shall be valid only for the operation or conduct of the aforesaid business at the place given above for the period upon approval until {formatDate(selectedPermit.expiration_date)}.</p>
+                  <p align="justify">Should the application for the issuance of PERMIT be found to contain deceitful purpose, this PERMIT shall be considered null and void ab Initio.</p>
+                  <p>Given this {formatDate(selectedPermit.issue_date)} at the City of Laoag, Philippines.</p>
                   <div className="signature">
-                    <br />
-                    <br />
-                    <br />
+                    <img src={MMKSig} alt="MMK Signature" className="header-logo" />
                     <p>MICHAEL MARCOS KEON</p>
                     <p>City Mayor</p>
                   </div>
                   <div className="signature">
                     <p>By the Authority of the City Mayor:</p>
                     <br />
-                    <br />
-                    <br />
                     <p>ATTY. FRANKLIN T. CALUMAG</p>
                     <p>City Administrator</p>
                   </div>
                   <div className="field">
-                    <p>
-                      <strong>Fees Paid:</strong> Php {selectedPermit.amount_paid}<br />
-                      <strong> O.R. No.:</strong> {selectedPermit.or_number}<br />
-                      <strong>Issued on:</strong> {formatDate(selectedPermit.issue_date)}<br />
-                      <strong>Issued at:</strong> Laoag City<br />
-                      <strong>Employees:</strong> {selectedPermit.number_of_employees}
-                    </p>
+                    <strong>Fees Paid:</strong> Php {selectedPermit.amount_paid}<br />
+                    <strong> O.R. No.:</strong> {selectedPermit.or_number}<br />
+                    <strong>Issued on:</strong> {formatDate(selectedPermit.issue_date)}<br />
+                    <strong>Issued at:</strong> Laoag City<br />
+                    <div className="qr-container">
+                      <QRCodeSVG
+                        value={generateQRValue(selectedPermit)}
+                        size={100}
+                        level="H"
+                        marginSize="2"
+                      />
+                    </div>
                   </div>
                 </>
               ) : (
@@ -436,25 +466,27 @@ const PermitList = () => {
                     </div>
                   </div>
                   <div className="field">
-                    <p><strong>PERMIT NO:</strong> {formatPermitNo(selectedPermit.id)}</p>
-                    <p><strong>DATE:</strong> {formatDate(selectedPermit.issue_date)}</p>
+                    <p><strong>PERMIT NO:</strong> {formatPermitNo(selectedPermit.id)} <span><strong>DATE:</strong> {formatDate(selectedPermit.issue_date)}</span></p>
                   </div>
-                  <p>THIS CERTIFIES that</p>
-                  <p>{selectedPermit.applicant_name}</p>
-                  <p>Of {selectedPermit.applicant_address}</p>
-                  <p>Is engaged in selling of:</p>
-                  <p>{selectedPermit.permit_type === 'special' ? 'FOOTWEAR/DRY GOODS' : 'UNKNOWN'}</p>
-                  <p>AT {selectedPermit.business_address}, Laoag City, Ilocos Norte</p>
-                  <p>has been granted to operate the following business/es</p>
-                  <p>RETAILER</p>
-                  <p>
-                    This permit is subject to the condition that all Laws, Ordinances, Resolutions, General Orders, Presidential Decrees, Letters of Instructions and Letters of Implementation governing the matter that shall be strictly complied with.
-                  </p>
-                  <p>
-                    VALID UP TO {formatDate(selectedPermit.expiration_date)}
+                  <br />
+                  <p align="center">THIS CERTIFIES that</p>
+                  <p align="center">{AllCapitalize(selectedPermit.applicant_name)}</p>
+                  <p align="center">Of {selectedPermit.applicant_address}</p>
+                  <p align="center">Is engaged in selling of:</p>
+                  <br />
+                  <p align="center">{AllCapitalize(selectedPermit.product_or_service)}</p>
+                  <p align="center">AT {selectedPermit.business_address}, Laoag City, Ilocos Norte has been granted to operate the following business/es</p>
+                  <br />
+                  <p align="center">TODO TODO TODO TODO TODO TODO TODO </p>
+                  <br />
+                  <p align="justify"><strong>This permit is subject to the condition that all Laws, Ordinances, Resolutions, General Orders, Presidential Decrees, Letters of Instructions and Letters of Implementation governing the matter that shall be strictly complied with.</strong></p><p>
                   </p>
                   <div className="signature">
+                    VALID UP TO <br />{formatDate(selectedPermit.expiration_date)}
+                  </div>
+                  <div className="signature">
                     <p>APPROVED:</p>
+                    <img src={MMKSig} alt="MMK Signature" className="header-logo" />
                     <p>MICHAEL MARCOS KEON</p>
                     <p>City Mayor</p>
                   </div>
@@ -463,6 +495,14 @@ const PermitList = () => {
                       <p><strong>Number of Employees:</strong> {selectedPermit.number_of_employees}</p>
                     </div>
                   )}
+                  <div className="qr-container">
+                    <QRCodeSVG
+                      value={generateQRValue(selectedPermit)}
+                      size={100}
+                      level="H"
+                      marginSize="2"
+                    />
+                  </div>
                 </>
               )}
             </div>

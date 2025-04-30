@@ -15,6 +15,7 @@ const PermitForm = () => {
     applicant_id_type: 'other',
     product_or_service: '',
     business_address: '',
+    business_type: '',
     business_contact: '',
     business_email: '',
     permit_type: 'peddler',
@@ -257,13 +258,26 @@ const PermitForm = () => {
         </Row>
 
         <Row>
-          <Col md={12}>
+          <Col md={6}>
             <Form.Group controlId="product_or_service" className="mb-3">
               <Form.Label>Product or Service *</Form.Label>
               <Form.Control
                 type="text"
                 name="product_or_service"
                 value={formData.product_or_service}
+                onChange={handleChange}
+                required
+                disabled={loading}
+              />
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group controlId="business_type" className="mb-3">
+              <Form.Label>Type of Business</Form.Label>
+              <Form.Control
+                type="text"
+                name="business_type"
+                value={formData.business_type}
                 onChange={handleChange}
                 required
                 disabled={loading}

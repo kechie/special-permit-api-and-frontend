@@ -111,10 +111,17 @@
     padding: 0 1rem;
   }
 
+  .qr-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
   /* Page setup for legal paper */
   @page {
     size: legal portrait;
-    margin: 0.5in;
+    margin: 0.25in;
   }
 
   /* Print-specific styles */
@@ -124,6 +131,15 @@
     }
 
     .header-logo {
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+
+    .qr-container {
+      margin: 0;
+    }
+
+    .qr-container svg {
       print-color-adjust: exact;
       -webkit-print-color-adjust: exact;
     }
