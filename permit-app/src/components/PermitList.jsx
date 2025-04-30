@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react';
 import { Card, Table, Button, Form, InputGroup, Modal, Alert, Pagination } from 'react-bootstrap';
 import { QRCodeSVG } from 'qrcode.react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { AllCapitalize, capitalizeFirstLetter, formatDate } from '../utils/helpers';
 import {
@@ -48,6 +48,7 @@ const PermitList = () => {
       : import.meta.env.VITE_NODE_ENV === 'test'
         ? import.meta.env.VITE_BASE_API_URL_TEST
         : import.meta.env.VITE_BASE_API_URL_DEV;
+  const navigate = useNavigate();
 
   const fetchPermits = React.useCallback(async (search = '', page = 1) => {
     try {
@@ -91,7 +92,10 @@ const PermitList = () => {
       console.error('Error deleting permit:', err);
     }
   };
-
+  // Add handleEdit function with other handlers
+  const handleEdit = (id) => {
+    navigate(`/permits/${id}/edit`);
+  };
   const handleShowTopModal = async (id) => {
     setModalError('');
     setModalLoading(true);
@@ -222,20 +226,17 @@ const PermitList = () => {
                   <td>{permit.or_number}</td>
                   <td>
                     {(role === 'assessment' || role === 'admin' || role === 'superadmin') && (
-                      <Link to={`/permits/${permit.id}/edit`}>
-                        {/* <OverlayTrigger placement="left" overlay={tooltip}></OverlayTrigger> */}
-                        <Button
-                          variant="warning"
-                          className="me-2"
-                          disabled={!!permit.amount_paid && !!permit.or_number}
-                          title={permit.amount_paid && permit.or_number
-                            ? "Cannot delete paid permits"
-                            : "Edit permit"
-                          }>
-                          <Pencil className="me-1" />{/* Edit */}
-                        </Button>
-
-                      </Link>
+                      <Button
+                        variant="warning"
+                        className="me-2"
+                        onClick={() => handleEdit(permit.id)}
+                        disabled={!!permit.amount_paid && !!permit.or_number}
+                        title={permit.amount_paid && permit.or_number
+                          ? "Cannot edit paid permits"
+                          : "Edit permit"
+                        }>
+                        <Pencil className="me-1" />{/* Edit */}
+                      </Button>
                     )}
                     {(role === 'admin' || role === 'superadmin') && (
                       <Button
@@ -326,7 +327,8 @@ const PermitList = () => {
                 </div>
                 <div className="header">
                   <h2>REPUBLIC OF THE PHILIPPINES</h2>
-                  <h2>Province of Ilocos Norte</h2>
+                  <h3>Province of Ilocos Norte</h3>
+                  <h3>City Of Laoag</h3>
                   <p>OFFICE OF THE CITY MAYOR</p>
                   <p>BUSINESS PERMIT AND LICENSING OFFICE</p>
                 </div>
