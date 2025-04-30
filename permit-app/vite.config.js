@@ -22,11 +22,18 @@ export default defineConfig({
       }
     },
     sourcemap: false,
-    //minify: 'terser',
+    minify: 'terser',
     terserOptions: {
       compress: {
         drop_console: true,
-        drop_debugger: true
+        drop_debugger: true,
+        pure_funcs: ['console.log']
+      },
+      mangle: {
+        safari10: true
+      },
+      format: {
+        comments: false
       }
     }
   }
