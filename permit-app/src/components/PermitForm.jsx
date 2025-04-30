@@ -254,6 +254,22 @@ const PermitForm = () => {
         </Row>
 
         <Row>
+          <Col md={12}>
+            <Form.Group controlId="product_or_service" className="mb-3">
+              <Form.Label>Product or Service *</Form.Label>
+              <Form.Control
+                type="text"
+                name="product_or_service"
+                value={formData.product_or_service}
+                onChange={handleChange}
+                required
+                disabled={loading}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Row>
           <Col md={4}>
             <Form.Group controlId="application_date" className="mb-3">
               <Form.Label>Application Date *</Form.Label>
@@ -352,7 +368,22 @@ const PermitForm = () => {
             </Form.Group>
           </Col>
         </Row>
-
+        <Row>
+          <Col md={4}>
+            <Form.Group controlId="peddlers_tax" className="mb-3">
+              <Form.Label>Peddlers Tax</Form.Label>
+              <Form.Control
+                type="number"
+                step="0.01"
+                min="0"
+                name="peddlers_tax"
+                value={formData.peddlers_tax}
+                onChange={handleChange}
+                disabled={loading || isPeddler}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
         <Row>
           <Col md={4}>
             <Form.Group controlId="mayors_permit_fee" className="mb-3">

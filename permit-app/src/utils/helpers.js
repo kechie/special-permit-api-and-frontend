@@ -7,6 +7,9 @@ export function formatDate(date) {
   return date ? new Date(date).toLocaleDateString() : 'N/A';
 };
 
+export function AllCapitalize(string) {
+  return string.toUpperCase();
+}
 //function capitalizeFirstLetter(string) {
 //  return string.replace(/^./, string[0].toUpperCase())
 //}

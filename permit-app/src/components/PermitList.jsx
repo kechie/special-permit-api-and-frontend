@@ -4,7 +4,7 @@ import { Card, Table, Button, Form, InputGroup, Modal, Alert, Pagination } from 
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { capitalizeFirstLetter, formatDate } from '../utils/helpers';
+import { AllCapitalize, capitalizeFirstLetter, formatDate } from '../utils/helpers';
 import {
   Search,
   PlusCircle,
@@ -278,7 +278,7 @@ const PermitList = () => {
         show={showTopModal}
         onHide={() => setShowTopModal(false)}
         size="lg"
-        className="print-only"
+        className="print-only legal-paper"
       >
         <Modal.Header closeButton>
           <Modal.Title>Tax Order of Payment</Modal.Title>
@@ -291,6 +291,7 @@ const PermitList = () => {
               <p><strong>Tax Order of Payment:</strong></p>
               <p><strong>Applicant:</strong> {selectedPermit.applicant_name}</p>
               <p><strong>Applying for:</strong> {capitalizeFirstLetter(selectedPermit.permit_type)}</p>
+              <p><strong>Product/Service:</strong> {selectedPermit.product_or_service}</p>
               <p>
                 <strong>Business Tax:</strong> ₱
                 {parseFloat(selectedPermit.business_tax).toFixed(2)}
@@ -358,7 +359,7 @@ const PermitList = () => {
         show={showPermitModal}
         onHide={() => setShowPermitModal(false)}
         size="lg"
-        className="print-only"
+        className="print-only legal-paper"
       >
         <Modal.Header closeButton>
           <Modal.Title>Permit Details</Modal.Title>
@@ -375,23 +376,15 @@ const PermitList = () => {
                       <strong>PERMIT NO.:</strong> {formatPermitNo(selectedPermit.id)}
                     </p>
                     <p className="field">
-                      <strong>CART #</strong>
+                      <strong>CART #</strong> {formatPermitNo(selectedPermit.id) + " - 1"}
                     </p>
-                    {selectedPermit.status === 'renewed' && <p>RENEW</p>}
+                    {/*selectedPermit.status === 'renewed' && <p>RENEW</p>*/}
                     <h1>PEDDLER'S PERMIT</h1>
                   </div>
-                  <p>
-                    In accordance with the provisions of the Revenue Code of the City of Laoag, PERMIT is hereby granted to {selectedPermit.applicant_name}, of Unknown Address, Laoag City to conduct his/her business generally known as: PEDDLER (Barangay): to sell {selectedPermit.permit_type === 'peddler' ? 'RICE IN A BOWL' : 'UNKNOWN'} in the City of Laoag, subject to the rules and regulations prescribed in said Revenue Code and all existing laws applicable thereto:
-                  </p>
-                  <p className="restrictions">
-                    PROVIDED THAT THERE WILL BE NO SELLING AND DISPLAYING OF WARES AND GOODS ON THE PUBLIC ROADS, STREETS, SIDEWALKS/SIDEWAYS AND IN ANY PART OF THE MARKET. PROVIDED FURTHER, THAT CITY ORDINANCE NO. 97-043 (OPLAN DALUS CODE) SHALL BE STRICTLY COMPLIED WITH". FURTHERMORE, PROVIDED THAT THERE WILL BE NO SELLING AND DISPLAYING AT RIZAL STREET, BONIFACIO STREET AND INFRONT OF CENTENNIAL ARENA.
-                    <br />
-                    <br />
-                    (MASAPUL A SAAN NGA AGLAKO KEN AGI-DISPLAY ITI TAGILAKO NA ITI PAMPUBLIKO A KALSADA, DALAN, IGID TI KALSADA KEN ITI ANIAMAN A PASET TI TIENDAAN. MASAPUL PAY ITI NAIGET A PANANGSUROT ITI CITY ORDINANCE NO. 97-043 (OPLAN DALUS CODE). MALAKSID ITI DAYTA, MAIPARIT PAY NGA AGLAKO KEN MANGI-DISPLAY TI LAKO ITI RIZAL STREET, BONIFACIO STREET KEN SANGO TI CENTENNIAL ARENA.)
-                  </p>
-                  <p>
-                    This PERMIT shall neither be negotiable nor transferable and shall be valid only for the operation or conduct of the aforesaid business at the place given above for the period upon approval until {formatDate(selectedPermit.expiration_date)}.
-                  </p>
+                  <p>In accordance with the provisions of the Revenue Code of the City of Laoag, PERMIT is hereby granted to {selectedPermit.applicant_name}, of Unknown Address, Laoag City to conduct his/her business generally known as: PEDDLER (Barangay): to sell {selectedPermit.permit_type === 'peddler' ? AllCapitalize(selectedPermit.product_or_service) : 'UNKNOWN'} in the City of Laoag, subject to the rules and regulations prescribed in said Revenue Code and all existing laws applicable thereto:</p>
+                  <p className="restrictions" style={{ paddingLeft: '2rem', paddingRight: '2rem' }}>PROVIDED THAT THERE WILL BE NO SELLING AND DISPLAYING OF WARES AND GOODS ON THE PUBLIC ROADS, STREETS, SIDEWALKS/SIDEWAYS AND IN ANY PART OF THE MARKET. PROVIDED FURTHER, THAT CITY ORDINANCE NO. 97-043 (OPLAN DALUS CODE) SHALL BE STRICTLY COMPLIED WITH". FURTHERMORE, PROVIDED THAT THERE WILL BE NO SELLING AND DISPLAYING AT RIZAL STREET, BONIFACIO STREET AND INFRONT OF CENTENNIAL ARENA.</p>
+                  <p className="restrictions" style={{ paddingLeft: '2rem', paddingRight: '2rem' }}>(MASAPUL A SAAN NGA AGLAKO KEN AGI-DISPLAY ITI TAGILAKO NA ITI PAMPUBLIKO A KALSADA, DALAN, IGID TI KALSADA KEN ITI ANIAMAN A PASET TI TIENDAAN. MASAPUL PAY ITI NAIGET A PANANGSUROT ITI CITY ORDINANCE NO. 97-043 (OPLAN DALUS CODE). MALAKSID ITI DAYTA, MAIPARIT PAY NGA AGLAKO KEN MANGI-DISPLAY TI LAKO ITI RIZAL STREET, BONIFACIO STREET KEN SANGO TI CENTENNIAL ARENA.)</p>
+                  <p>This PERMIT shall neither be negotiable nor transferable and shall be valid only for the operation or conduct of the aforesaid business at the place given above for the period upon approval until {formatDate(selectedPermit.expiration_date)}.</p>
                   <p>
                     Should the application for the issuance of PERMIT be found to contain deceitful purpose, this PERMIT shall be considered null and void ab Initio.
                   </p>
@@ -399,22 +392,28 @@ const PermitList = () => {
                     Given this {formatDate(selectedPermit.issue_date)} at the City of Laoag, Philippines.
                   </p>
                   <div className="signature">
+                    <br />
+                    <br />
+                    <br />
                     <p>MICHAEL MARCOS KEON</p>
                     <p>City Mayor</p>
                   </div>
                   <div className="signature">
                     <p>By the Authority of the City Mayor:</p>
+                    <br />
+                    <br />
+                    <br />
                     <p>ATTY. FRANKLIN T. CALUMAG</p>
                     <p>City Administrator</p>
                   </div>
                   <div className="field">
-                    <p><strong>Fees Paid:</strong> Php {selectedPermit.amount_paid}</p>
-                    <p><strong>O.R. No.:</strong> {/* or number*/}2847436</p>
-                    <p><strong>Issued on:</strong> {formatDate(selectedPermit.issue_date)}</p>
-                    <p><strong>Issued at:</strong> Laoag City</p>
-                    {selectedPermit.number_of_employees && (
-                      <p><strong>Number of Employees:</strong> {selectedPermit.number_of_employees}</p>
-                    )}
+                    <p>
+                      <strong>Fees Paid:</strong> Php {selectedPermit.amount_paid}<br />
+                      <strong> O.R. No.:</strong> {selectedPermit.or_number}<br />
+                      <strong>Issued on:</strong> {formatDate(selectedPermit.issue_date)}<br />
+                      <strong>Issued at:</strong> Laoag City<br />
+                      <strong>Employees:</strong> {selectedPermit.number_of_employees}
+                    </p>
                   </div>
                 </>
               ) : (

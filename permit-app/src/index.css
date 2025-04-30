@@ -1,148 +1,114 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  min-width: 320px;
-  min-height: 100vh;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-
-button:hover {
-  border-color: #646cff;
-}
-
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-
-  a:hover {
-    color: #747bff;
-  }
-
-  button {
-    background-color: #f9f9f9;
-  }
-}
-
-.permit-document {
-  font-family: Arial, sans-serif;
-  line-height: 1.5;
-}
-
-.permit-document h1,
-.permit-document h2 {
-  text-align: center;
-  text-transform: uppercase;
-  margin: 0.5em 0;
-}
-
-.permit-document .header {
-  text-align: center;
-  margin-bottom: 1em;
-}
-
-.permit-document .field {
-  margin: 0.5em 0;
-}
-
-.permit-document .field strong {
-  display: inline-block;
-  width: 150px;
-}
-
-.permit-document .restrictions {
-  margin: 1em 0;
-  font-size: 0.9em;
-}
-
-.permit-document .signature {
-  margin-top: 2em;
-  text-align: right;
-}
-
-.permit-document .signature p {
-  margin: 0.2em 0;
-}
-
 @media print {
+
+  /* Hide all elements except the print-only modal */
   body>* {
     display: none !important;
   }
 
   .modal.print-only {
     display: block !important;
+    position: static;
+    /* Remove modal positioning */
   }
 
+  /* Modal dialog styling for print */
   .modal.print-only .modal-dialog {
     margin: 0;
     width: 100%;
+    max-width: 100%;
+    height: 100%;
   }
 
+  /* Modal content styling */
   .modal.print-only .modal-content {
     border: none;
     box-shadow: none;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    /* Prevent scrollbars */
   }
 
+  /* Modal body styling */
+  .modal.print-only .modal-body {
+    padding: 0.5in;
+    overflow: hidden;
+    /* Prevent scrollbars */
+    font-size: 12pt;
+    /* Readable font size */
+    line-height: 1.4;
+    width: 7.5in;
+    /* Account for 0.5in margins on both sides */
+    margin: 0 auto;
+    /* Center content */
+  }
+
+  /* Ensure print-only content fits within legal paper */
+  .modal.print-only .print-only-content,
+  .modal.print-only .permit-document {
+    width: 100%;
+    max-width: 7.5in;
+    /* Usable width for legal paper */
+    min-height: auto;
+    /* Allow content to flow naturally */
+    max-height: none;
+    /* Remove height restrictions */
+    overflow: hidden;
+    /* Prevent scrollbars */
+    box-sizing: border-box;
+    padding: 0;
+  }
+
+  /* Hide non-essential elements */
   .modal.print-only .modal-header,
-  .modal.print-only .modal-footer {
+  .modal.print-only .modal-footer,
+  .modal.print-only button,
+  .modal.print-only .btn {
     display: none !important;
   }
 
-  .modal.print-only .modal-body {
-    padding: 20px;
+  /* Specific styling for permit document */
+  .permit-document p {
+    margin: 0.3em 0;
+    /* Tighten spacing to fit content */
   }
 
-  .modal.print-only .print-only-content {
-    display: block !important;
+  .permit-document .restrictions {
+    font-size: 10pt;
+    /* Smaller font for restrictions */
+    text-indent: 1.5em;
+    margin: 0.5em 0;
+  }
+
+  .permit-document .signature {
+    margin-top: 1em;
+    text-align: right;
+  }
+
+  /* Page setup for legal paper */
+  @page {
+    size: legal portrait;
+    margin: 0.5in;
+  }
+
+  /* Hide scrollbars across browsers */
+  body,
+  .modal.print-only,
+  .modal.print-only .modal-body,
+  .modal.print-only .print-only-content,
+  .modal.print-only .permit-document {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+
+  /* Chrome, Safari, Opera */
+  body::-webkit-scrollbar,
+  .modal.print-only::-webkit-scrollbar,
+  .modal.print-only .modal-body::-webkit-scrollbar,
+  .modal.print-only .print-only-content::-webkit-scrollbar,
+  .modal.print-only .permit-document::-webkit-scrollbar {
+    display: none;
   }
 }
