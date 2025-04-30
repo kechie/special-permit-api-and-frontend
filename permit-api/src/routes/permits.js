@@ -14,6 +14,9 @@ router.get('/', verifyToken, permitController.getAllPermits);
 // Get a permit by ID
 router.get('/:id', verifyToken, permitController.getPermitById);
 
+// Get a permit by ID
+router.get('/noauth/:id', permitController.getPermitById);
+
 // Update a permit by ID
 router.put('/:id', verifyToken, validatePermit, permitController.updatePermit);
 

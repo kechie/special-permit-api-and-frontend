@@ -6,6 +6,7 @@ import PermitList from './components/PermitList';
 import PermitForm from './components/PermitForm';
 import PrintTop from './components/PrintTop';
 import PrintPermit from './components/PrintPermit';
+import PermitStatus from './components/PermitStatus';
 import MonitorComponent from './components/PermitMonitor';
 import NavbarComponent from './components/PermitNavbar';
 import Footer from './components/Footer';
@@ -40,6 +41,7 @@ const routeConfig = [
   // Public routes
   { path: '/', element: <Home />, public: true },
   { path: '/login', element: <Login />, public: true },
+  { path: '/status', element: <PermitStatus />, public: true },
   // Admin/Staff routes
   {
     path: '/permits',

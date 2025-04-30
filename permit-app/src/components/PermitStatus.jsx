@@ -16,11 +16,10 @@ const PermitStatus = () => {
         : import.meta.env.VITE_BASE_API_URL_DEV;
 
   useEffect(() => {
+    console.log('API_BASE_URL:', API_BASE_URL);
     const fetchPermit = async () => {
-      const token = localStorage.getItem('spclpermittoken')
-      const response = await axios.get(`${API_BASE_URL}/api/permits/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
+      //const token = localStorage.getItem('spclpermittoken')
+      const response = await axios.get(`${API_BASE_URL}/permits/${id}`)
       setPermit(response.data)
     }
 
@@ -37,7 +36,7 @@ const PermitStatus = () => {
 
   return (
     <div className="container mt-5">
-      <h2>Official Permit</h2>
+      <h2>Official Permit Status is a WIP</h2>
       <p><strong>Applicant:</strong> {permit.applicant_name}</p>
       <p><strong>Permit Type:</strong> {permit.permit_type}</p>
       <p><strong>Issue Date:</strong> {new Date(permit.issue_date).toLocaleDateString()}</p>
