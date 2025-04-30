@@ -31,6 +31,39 @@ module.exports = {
     database: process.env.DB_NAME_PROD,
     host: process.env.DB_HOST_PROD,
     dialect: 'postgres',
+    // Use SSL in production for secure connections
+    // This is important for Heroku and other cloud providers
+    // that require SSL connections to their databases
+    // Note: You may need to adjust this based on your database provider
+    // and its SSL requirements
+    // For example, AWS RDS may require different settings
+    // or additional certificates
+    // For Heroku, you might need to set the `ssl` option to true
+    // and provide the `rejectUnauthorized` option
+    // to avoid certificate errors
+    // For example:
+    // dialectOptions: {
+    //   ssl: {
+    //     require: true,
+    //     rejectUnauthorized: false
+    //   }
+    // }
+    // For AWS RDS, you might need to set the `ca` option
+    // to the certificate authority (CA) certificate
+    // For example:
+    // dialectOptions: {
+    //   ssl: {
+    //     require: true,
+    //     rejectUnauthorized: false,
+    //     ca: process.env.DB_CA_CERT
+    //   }
+    //   }
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    },
     sync: {
       force: false,  // Never use force in production; tables should be pre-created
       alter: true,    // Allows for schema changes without dropping tables
