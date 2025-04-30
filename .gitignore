@@ -1,3 +1,4 @@
 .~lock*
 permit-app/.yarn/*
 permit-api/.yarn/*
+permit-app/.yarn/install-state.gz
