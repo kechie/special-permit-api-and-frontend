@@ -492,15 +492,14 @@ const PermitList = () => {
                     <p><strong>PERMIT NO:</strong> {formatPermitNo(selectedPermit.id)} <span><strong>DATE:</strong> {formatDate(selectedPermit.issue_date)}</span></p>
                   </div>
                   <br />
-                  <p align="center">THIS CERTIFIES that</p>
-                  <p align="center">{AllCapitalize(selectedPermit.applicant_name)}</p>
+                  <p>THIS CERTIFIES that</p>
+                  <h3 align="center">{AllCapitalize(selectedPermit.applicant_name)}</h3>
                   <p align="center">Of {selectedPermit.applicant_address}</p>
                   <p align="center">Is engaged in selling of:</p>
-                  <br />
-                  <p align="center">{AllCapitalize(selectedPermit.product_or_service)}</p>
+                  <h3 align="center">{AllCapitalize(selectedPermit.product_or_service)}</h3>
                   <p align="center">AT {selectedPermit.business_address}, Laoag City, Ilocos Norte has been granted to operate the following business/es</p>
                   <br />
-                  <p align="center">TODO TODO TODO TODO TODO TODO TODO </p>
+                  <h3 align="center">{selectedPermit.business_type}</h3>
                   <br />
                   <p align="justify"><strong>This permit is subject to the condition that all Laws, Ordinances, Resolutions, General Orders, Presidential Decrees, Letters of Instructions and Letters of Implementation governing the matter that shall be strictly complied with.</strong></p><p>
                   </p>
