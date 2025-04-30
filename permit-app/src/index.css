@@ -85,10 +85,48 @@
     text-align: right;
   }
 
+  .permit-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .logo-container {
+    flex: 0 0 100px;
+    /* Adjust width as needed */
+    padding: 0 1rem;
+  }
+
+  .header-logo {
+    width: 100%;
+    height: auto;
+    max-width: 100px;
+    /* Adjust size as needed */
+  }
+
+  .header-text {
+    flex: 1;
+    padding: 0 1rem;
+  }
+
   /* Page setup for legal paper */
   @page {
     size: legal portrait;
     margin: 0.5in;
+  }
+
+  /* Print-specific styles */
+  @media print {
+    .permit-header {
+      page-break-inside: avoid;
+    }
+
+    .header-logo {
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
   }
 
   /* Hide scrollbars across browsers */

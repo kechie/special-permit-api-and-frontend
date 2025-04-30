@@ -33,6 +33,18 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    business_address: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    business_contact: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    business_email: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
     permit_type: {
       type: DataTypes.ENUM('peddler', 'special'),
       allowNull: false

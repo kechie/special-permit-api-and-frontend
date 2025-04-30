@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
 import { useAuth } from '../context/AuthContext';
+import BPLOLogo from '../assets/bplo-logo.png';
 
 const PermitNavbar = () => {
   const { isAuthenticated, hasRole, logout } = useAuth();
@@ -15,9 +16,9 @@ const PermitNavbar = () => {
     <Navbar bg="dark" variant="dark" expand="lg" className="mb-3">
       <Navbar.Brand as={Link} to="/">
         <img
-          src="CMO-seal-300x300.webp"
-          width="48"
-          height="48"
+          src={BPLOLogo}
+          width="52"
+          height="52"
           className="d-inline-block align-top"
           alt="React Bootstrap logo"
         />

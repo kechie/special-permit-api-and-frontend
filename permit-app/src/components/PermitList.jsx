@@ -13,6 +13,8 @@ import {
   Printer,
   Receipt
 } from 'react-bootstrap-icons';
+import laoagLogo from '../assets/laoag-logo.png';
+import BPLOLogo from '../assets/bplo-logo.png';
 
 const PermitList = () => {
   const { role } = useAuth();
@@ -418,12 +420,20 @@ const PermitList = () => {
                 </>
               ) : (
                 <>
-                  <div className="header">
-                    <h2>REPUBLIC OF THE PHILIPPINES</h2>
-                    <h2>Province of Ilocos Norte</h2>
-                    <p>OFFICE OF THE CITY MAYOR</p>
-                    <p>BUSINESS PERMIT AND LICENSING OFFICE</p>
-                    <h1>MAYOR’S PERMIT</h1>
+                  <div className="header permit-header">
+                    <div className="logo-container">
+                      <img src={laoagLogo} alt="Laoag City Logo" className="header-logo" />
+                    </div>
+                    <div className="header">
+                      <h2>REPUBLIC OF THE PHILIPPINES</h2>
+                      <h2>Province of Ilocos Norte</h2>
+                      <p>OFFICE OF THE CITY MAYOR</p>
+                      <p>BUSINESS PERMIT AND LICENSING OFFICE</p>
+                      <h2>MAYOR’S PERMIT</h2>
+                    </div>
+                    <div className="logo-container">
+                      <img src={BPLOLogo} alt="BPLO Logo" className="header-logo" />
+                    </div>
                   </div>
                   <div className="field">
                     <p><strong>PERMIT NO:</strong> {formatPermitNo(selectedPermit.id)}</p>
@@ -431,10 +441,10 @@ const PermitList = () => {
                   </div>
                   <p>THIS CERTIFIES that</p>
                   <p>{selectedPermit.applicant_name}</p>
-                  <p>Of {/*selectedPermit.applicant_address*/} Laoag City, Ilocos Norte</p>
+                  <p>Of {selectedPermit.applicant_address}</p>
                   <p>Is engaged in selling of:</p>
                   <p>{selectedPermit.permit_type === 'special' ? 'FOOTWEAR/DRY GOODS' : 'UNKNOWN'}</p>
-                  <p>AT Unknown Location, Laoag City, Ilocos Norte</p>
+                  <p>AT {selectedPermit.business_address}, Laoag City, Ilocos Norte</p>
                   <p>has been granted to operate the following business/es</p>
                   <p>RETAILER</p>
                   <p>
