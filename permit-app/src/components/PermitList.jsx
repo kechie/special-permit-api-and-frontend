@@ -153,14 +153,20 @@ const PermitList = () => {
 
   // Add QR code generator function
   const generateQRValue = (permit) => {
+    /*
+    console.log(formatPermitNo(permit.id));
+    console.log(permit.id);
     return JSON.stringify({
-      permitNo: formatPermitNo(permit.id),
+      permitNo: permit.id,
       name: permit.applicant_name,
       type: permit.permit_type,
       issued: permit.issue_date,
       expires: permit.expiration_date,
       or: permit.or_number
-    });
+    }); */
+    //console.log(import.meta.env.BASE_URL);
+    //console.log(`${import.meta.env.VITE_HOST_PROD}/status/${permit.id}`);
+    return `${import.meta.env.VITE_HOST_PROD}/status/${permit.id}`;
   };
 
   /*   const tooltip = (
