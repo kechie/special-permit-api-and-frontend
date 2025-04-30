@@ -13,7 +13,7 @@ const PermitNavbar = () => {
   };
 
   return (
-    <Navbar bg="dark" variant="dark" expand="lg" className="mb-3">
+    <Navbar expand="lg" className="mb-3">
       <Navbar.Brand as={Link} to="/">
         <img
           src={BPLOLogo}
