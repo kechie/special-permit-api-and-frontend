@@ -314,7 +314,21 @@ const PermitList = () => {
           {modalError && <Alert variant="danger">{modalError}</Alert>}
           {selectedPermit && !modalLoading && !modalError && (
             <div className="print-only-content">
-              <p><strong>Tax Order of Payment:</strong></p>
+              <div className="header permit-header">
+                <div className="logo-container">
+                  <img src={laoagLogo} alt="Laoag City Logo" className="header-logo" />
+                </div>
+                <div className="header">
+                  <h2>REPUBLIC OF THE PHILIPPINES</h2>
+                  <h2>Province of Ilocos Norte</h2>
+                  <p>OFFICE OF THE CITY MAYOR</p>
+                  <p>BUSINESS PERMIT AND LICENSING OFFICE</p>
+                </div>
+                <div className="logo-container">
+                  <img src={BPLOLogo} alt="BPLO Logo" className="header-logo" />
+                </div>
+              </div>
+              <p align="center"><strong>Tax Order of Payment:</strong></p>
               <p><strong>Applicant:</strong> {selectedPermit.applicant_name}</p>
               <p><strong>Applying for:</strong> {capitalizeFirstLetter(selectedPermit.permit_type)}</p>
               <p><strong>Product/Service:</strong> {selectedPermit.product_or_service}</p>
@@ -410,7 +424,8 @@ const PermitList = () => {
                     <div className="logo-container">
                       <img src={BPLOLogo} alt="BPLO Logo" className="header-logo" />
                     </div>
-                  </div><div className='field'>
+                  </div>
+                  <div className='field'>
                     <strong>PERMIT NO.:</strong> {formatPermitNo(selectedPermit.id)}<br />
                     <strong>CART #</strong> {formatPermitNo(selectedPermit.id) + " - 1"}
                     <h2 align="center">PEDDLER'S PERMIT</h2>
