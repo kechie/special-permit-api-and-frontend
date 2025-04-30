@@ -41,7 +41,7 @@ const routeConfig = [
   // Public routes
   { path: '/', element: <Home />, public: true },
   { path: '/login', element: <Login />, public: true },
-  { path: '/status', element: <PermitStatus />, public: true },
+  { path: '/status/:id', element: <PermitStatus />, public: true },
   // Admin/Staff routes
   {
     path: '/permits',

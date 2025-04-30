@@ -20,7 +20,7 @@ const PermitNavbar = () => {
           width="52"
           height="52"
           className="d-inline-block align-top"
-          alt="React Bootstrap logo"
+          alt="BPLO logo"
         />
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />

@@ -19,29 +19,29 @@ const PermitStatus = () => {
     console.log('API_BASE_URL:', API_BASE_URL);
     const fetchPermit = async () => {
       //const token = localStorage.getItem('spclpermittoken')
-      const response = await axios.get(`${API_BASE_URL}/permits/${id}`)
+      const response = await axios.get(`${API_BASE_URL}/permits/noauth/${id}`)
       setPermit(response.data)
     }
 
     fetchPermit()
   }, [id, API_BASE_URL])
 
-  useEffect(() => {
-    if (permit) {
-      window.print()
-    }
-  }, [permit])
-
+  /*   useEffect(() => {
+      if (permit) {
+        window.print()
+      }
+    }, [permit])
+   */
   if (!permit) return <p>Loading...</p>
 
   return (
     <div className="container mt-5">
-      <h2>Official Permit Status is a WIP</h2>
-      <p><strong>Applicant:</strong> {permit.applicant_name}</p>
+      {/*       <p>{permit.amount_paid},{permit.or_number}</p>*/}
+      <h2 align="center">Your Special Permit is {permit.amount_paid && permit.or_number ? "Valid" : "Unpaid"}</h2>
+      {/*       <p><strong>Applicant:</strong> {permit.applicant_name}</p>
       <p><strong>Permit Type:</strong> {permit.permit_type}</p>
       <p><strong>Issue Date:</strong> {new Date(permit.issue_date).toLocaleDateString()}</p>
-      <p><strong>Expiration Date:</strong> {new Date(permit.expiration_date).toLocaleDateString()}</p>
-      <p><strong>Status:</strong> {permit.status}</p>
+      <p><strong>Expiration Date:</strong> {new Date(permit.expiration_date).toLocaleDateString()}</p> */}
     </div>
   )
 }
