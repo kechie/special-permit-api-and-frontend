@@ -135,8 +135,23 @@
       -webkit-print-color-adjust: exact;
     }
 
+    .print-row {
+      display: flex;
+      width: 100%;
+      margin: 0;
+      page-break-inside: avoid;
+    }
+
+    .print-col {
+      flex: 1;
+      padding: 0.5rem;
+    }
+
     .qr-container {
       margin: 0;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-start;
     }
 
     .qr-container svg {

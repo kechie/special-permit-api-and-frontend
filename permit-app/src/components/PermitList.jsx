@@ -9,7 +9,7 @@
 //
 import React, { useEffect, useState } from 'react';
 //import { Card, Table, Button, Form, InputGroup, Modal, Alert, Pagination, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { Card, Table, Button, Form, InputGroup, Modal, Alert, Pagination } from 'react-bootstrap';
+import { Card, Table, Button, Form, InputGroup, Modal, Alert, Pagination, Row, Col } from 'react-bootstrap';
 import { QRCodeSVG } from 'qrcode.react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
@@ -426,8 +426,8 @@ const PermitList = () => {
                     <div className="header">
                       <h2>REPUBLIC OF THE PHILIPPINES</h2>
                       <h2>Province of Ilocos Norte</h2>
-                      <p>OFFICE OF THE CITY MAYOR</p>
-                      <p>BUSINESS PERMIT AND LICENSING OFFICE</p>
+                      <h3>OFFICE OF THE CITY MAYOR</h3>
+                      <h3>BUSINESS PERMIT AND LICENSING OFFICE</h3>
                     </div>
                     <div className="logo-container">
                       <img src={BPLOLogo} alt="BPLO Logo" className="header-logo" />
@@ -456,20 +456,26 @@ const PermitList = () => {
                     <p>ATTY. FRANKLIN T. CALUMAG</p>
                     <p>City Administrator</p>
                   </div>
-                  <div className="field">
-                    <strong>Fees Paid:</strong> Php {selectedPermit.amount_paid}<br />
-                    <strong> O.R. No.:</strong> {selectedPermit.or_number}<br />
-                    <strong>Issued on:</strong> {formatDate(selectedPermit.issue_date)}<br />
-                    <strong>Issued at:</strong> Laoag City<br />
-                    <div className="qr-container">
-                      <QRCodeSVG
-                        value={generateQRValue(selectedPermit)}
-                        size={100}
-                        level="H"
-                        marginSize="2"
-                      />
-                    </div>
-                  </div>
+                  <Row>
+                    <Col md={6} className="print-col">
+                      <div className="field">
+                        <strong>Fees Paid:</strong> Php {selectedPermit.amount_paid}<br />
+                        <strong> O.R. No.:</strong> {selectedPermit.or_number}<br />
+                        <strong>Issued on:</strong> {formatDate(selectedPermit.issue_date)}<br />
+                        <strong>Issued at:</strong> Laoag City<br />
+                      </div>
+                    </Col>
+                    <Col md={6} className="print-col">
+                      <div className="qr-container">
+                        <QRCodeSVG
+                          value={generateQRValue(selectedPermit)}
+                          size={128}
+                          level="H"
+                          marginSize="2"
+                        />
+                      </div>
+                    </Col>
+                  </Row>
                 </>
               ) : (
                 <>
@@ -512,19 +518,21 @@ const PermitList = () => {
                     <p>MICHAEL MARCOS KEON</p>
                     <p>City Mayor</p>
                   </div>
-                  {selectedPermit.number_of_employees && (
-                    <div className="field">
-                      <p><strong>Number of Employees:</strong> {selectedPermit.number_of_employees}</p>
-                    </div>
-                  )}
-                  <div className="qr-container">
-                    <QRCodeSVG
-                      value={generateQRValue(selectedPermit)}
-                      size={100}
-                      level="H"
-                      marginSize="2"
-                    />
-                  </div>
+                  <Row className="print-row">
+                    <Col md={6} className="print-col">
+                      <strong>Number of Employees:</strong> {selectedPermit.number_of_employees}
+                    </Col>
+                    <Col md={6} className="print-col">
+                      <div className="qr-container">
+                        <QRCodeSVG
+                          value={generateQRValue(selectedPermit)}
+                          size={128}
+                          level="H"
+                          marginSize="2"
+                        />
+                      </div>
+                    </Col>
+                  </Row>
                 </>
               )}
             </div>
@@ -541,7 +549,7 @@ const PermitList = () => {
           )}
         </Modal.Footer>
       </Modal>
-    </div>
+    </div >
   );
 };
 
