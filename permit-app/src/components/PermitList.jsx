@@ -27,6 +27,8 @@ import {
 import laoagLogo from '../assets/laoag-logo.png';
 import BPLOLogo from '../assets/bplo-logo.png';
 import MMKSig from '../assets/mmk-sig.png';
+import AAPLogo from '../assets/aap.png';
+
 const PermitList = () => {
   const { role } = useAuth();
   const [permits, setPermits] = useState([]);
@@ -446,18 +448,29 @@ const PermitList = () => {
                   <p align="justify">Should the application for the issuance of PERMIT be found to contain deceitful purpose, this PERMIT shall be considered null and void ab Initio.</p>
                   <p>Given this {formatDate(selectedPermit.issue_date)} at the City of Laoag, Philippines.</p>
                   <div className="signature">
-                    <img src={MMKSig} alt="MMK Signature" className="header-logo" />
-                    <p>MICHAEL MARCOS KEON</p>
+                    <br />
+                    <br />
+                    {/* <img src={MMKSig} alt="MMK Signature" className="header-logo" /> */}
+                    <p>JAMES BRYAN Q. ALCID</p>
                     <p>City Mayor</p>
                   </div>
                   <div className="signature">
                     <p>By the Authority of the City Mayor:</p>
                     <br />
-                    <p>ATTY. FRANKLIN T. CALUMAG</p>
+                    <br />
+                    <p>ATTY. ED VON ALLAN F. CID</p>
                     <p>City Administrator</p>
                   </div>
                   <Row>
-                    <Col md={6} className="print-col">
+                    <Col md={3} className="print-col">
+                      <img
+                        src={AAPLogo}
+                        height="60"
+                        className="d-inline-block"
+                        alt="Alisto Asenso Progreso Logo"
+                      />
+                    </Col>
+                    <Col md={3} className="print-col">
                       <div className="field">
                         <strong>Fees Paid:</strong> Php {selectedPermit.amount_paid}<br />
                         <strong> O.R. No.:</strong> {selectedPermit.or_number}<br />
@@ -484,11 +497,11 @@ const PermitList = () => {
                       <img src={laoagLogo} alt="Laoag City Logo" className="header-logo" />
                     </div>
                     <div className="header">
-                      <h2>REPUBLIC OF THE PHILIPPINES</h2>
-                      <h2>Province of Ilocos Norte</h2>
+                      <h3>REPUBLIC OF THE PHILIPPINES</h3>
+                      <h3>Province of Ilocos Norte</h3>
                       <p>OFFICE OF THE CITY MAYOR</p>
                       <p>BUSINESS PERMIT AND LICENSING OFFICE</p>
-                      <h2>MAYOR’S PERMIT</h2>
+                      <h3>MAYOR’S PERMIT</h3>
                     </div>
                     <div className="logo-container">
                       <img src={BPLOLogo} alt="BPLO Logo" className="header-logo" />
@@ -513,14 +526,35 @@ const PermitList = () => {
                     VALID UP TO <br />{formatDate(selectedPermit.expiration_date)}
                   </div>
                   <div className="signature">
-                    <p>APPROVED:</p>
-                    <img src={MMKSig} alt="MMK Signature" className="header-logo" />
-                    <p>MICHAEL MARCOS KEON</p>
-                    <p>City Mayor</p>
+                    <Row>
+                      <Col md={6} className="print-col">
+                        <p>APPROVED:</p>
+                        <br />
+                        <br />
+                        <br />
+                        {/*                     <img src={MMKSig} alt="MMK Signature" className="header-logo" />*/}
+                        <p>JAMES BRYAN Q. ALCID<br />
+                          City Mayor</p>
+                      </Col>
+                    </Row>
                   </div>
                   <Row className="print-row">
-                    <Col md={6} className="print-col">
-                      <strong>Number of Employees:</strong> {selectedPermit.number_of_employees}
+                    <Col md={3} className="print-col">
+                      <img
+                        src={AAPLogo}
+                        height="60"
+                        className="d-inline-block"
+                        alt="Alisto Asenso Progreso Logo"
+                      />
+                    </Col>
+                    <Col md={3} className="print-col">
+                      <strong>Number of Employees:</strong> {selectedPermit.number_of_employees}<br />
+                      <strong>Fees Paid:</strong> Php {selectedPermit.amount_paid}<br />
+                      <strong> O.R. No.:</strong> {selectedPermit.or_number}<br />
+                      <br />
+                      <br />
+                      <strong>Issued on:</strong> {formatDate(selectedPermit.issue_date)}<br />
+
                     </Col>
                     <Col md={6} className="print-col">
                       <div className="qr-container">

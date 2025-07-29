@@ -1,16 +1,16 @@
 import { Container } from 'react-bootstrap';
 //import BPLOLogo from '../assets/bplo-logo.png';
 import BagongPilipinasLogo from '../assets/bagongpilipinaslores.webp';
-import BaroALaoagLogo from '../assets/baroalaoag.png';
+import AAPLogo from '../assets/aap.png';
 const Footer = () => {
   return (
     <footer className="mt-3">
       <Container className="py-3 text-center">
         <img
-          src={BaroALaoagLogo}
+          src={AAPLogo}
           height="60"
           className="d-inline-block"
-          alt="Baro a Laoag Logo"
+          alt="Alisto Asenso Progreso Logo"
         />
         <img
           src={BagongPilipinasLogo}
@@ -19,7 +19,7 @@ const Footer = () => {
           alt="Bagong Pilipinas Logo"
         />
         <p>&copy; {new Date().getFullYear()} City Government of Laoag. All rights reserved.<br />
-          <small>coding by: Laoag City ICTO App Dev Team</small></p>
+          <small>coding by: eihcek information systems analyst I</small></p>
       </Container>
     </footer >
   );
