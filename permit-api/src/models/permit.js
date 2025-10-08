@@ -50,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     permit_type: {
-      type: DataTypes.ENUM('peddler', 'special'),
+      type: DataTypes.ENUM('peddler', 'special', 'firecracker'),
       allowNull: false
     },
     application_date: {

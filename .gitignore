@@ -2,3 +2,10 @@
 permit-app/.yarn/*
 permit-api/.yarn/*
 permit-app/.yarn/install-state.gz
+permit-api/.yarn/install-state.gz
+permit-app/.pnp.cjs
+permit-api/.pnp.cjs
+permit-app/.pnp.loader.mjs
+permit-api/.pnp.loader.mjs
+permit-app/.pnp.loader.cjs
+#permit-app/.yarn/install-state.gz
